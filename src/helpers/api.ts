@@ -82,7 +82,7 @@ export async function addReaction(messageId: string | number, emoji: string): Pr
 
 interface Channel {
     id: number,
-    type: number,
+    type: ChannelType,
     name: string
 }
 
@@ -107,7 +107,10 @@ interface Message {
 interface User {
     id: number,
     avatar: string,
-    username: string
+    username: string,
+    discriminator: number,
+    system?: boolean,
+    bot?: boolean
 }
 
 export interface Role {
@@ -118,11 +121,17 @@ export interface Role {
 
 interface DMChannel {
     id: string,
-    type: number,
+    type: ChannelType,
     recipients: User[],
     // Only for groups DMs
     name?: string,
     icon?: string
+}
+
+enum ChannelType {
+    "GUILD_TEXT", "DM", "GUILD_VOICE", "GROUP_DM", "GUILD_CATEGORY", "GUILD_ANNOUNCEMENT",
+    "ANNOUNCEMENT_THREAD", "PUBLIC_THREAD", "PRIVATE_THREAD", "GUILD_STAGE_VOICE", "GUILD_DIRECTORY",
+    "GUILD_FORUM"
 }
 
 interface Reaction {
@@ -131,7 +140,7 @@ interface Reaction {
     emoji: Emoji
 }
 
-interface Emoji {
+export interface Emoji {
     user?: User,
     roles?: Role[],
     name: string,
