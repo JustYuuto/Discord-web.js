@@ -1,23 +1,111 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import { setupCounter } from './counter'
+import './app.css';
+import 'normalize.css';
+import ChannelsList from './components/Channels/List';
+import DMsList from './components/DMs/List';
+import { navigateTo } from './helpers/navigation';
+import { urlParts } from './helpers/url';
+import { guildChannels, tokenTest } from './helpers/api';
+import GuildsList from './components/Guilds/List';
+import { css } from '@emotion/css';
+import ChannelMessages from './components/Channels/Messages';
+// import DMsMessages from './components/DMs/Messages';
+import Icon from './components/Icon';
+import Markdown from './components/Markdown';
+import UserMention from './components/Interactive/Mentions/User';
+import RoleMention from './components/Interactive/Mentions/Role';
+import GuildsListButton from './components/Guilds/ListButton';
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+customElements.define('channels-list', ChannelsList);
+customElements.define('dms-list', DMsList);
+customElements.define('guilds-list', GuildsList);
+customElements.define('guilds-list-button', GuildsListButton);
+customElements.define('channel-messages', ChannelMessages);
+customElements.define('svg-icon', Icon);
+customElements.define('markdown-text', Markdown);
+customElements.define('user-mention', UserMention);
+customElements.define('role-mention', RoleMention);
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+const path = window.location.pathname;
+const root = document.querySelector<HTMLDivElement>('#app');
+if (!root) throw new Error('Cannot render app because the app root element cannot be found.');
+const pathRegexps = {
+    guild: /\/channels\/([0-9]{18,19})/gi,
+    channel: /\/channels\/([0-9]{18,19})\/([0-9]{18,19})/gi,
+    dm: /\/channels\/@me\/([0-9]{18,19})/gi,
+};
+
+(async () => {
+    const guildId = urlParts()[1];
+    const token = new URLSearchParams(window.location.search).get('token');
+    if (path === '/login') {
+        if (token !== null) {
+            tokenTest(token).then(status => {
+                if (status === 200) {
+                    localStorage.setItem('token', token);
+                    navigateTo('/app');
+                }
+            });
+        }
+    } else if (path === '/app') {
+        navigateTo('/channels/@me');
+    } else if (path === '/channels/@me') {
+        root.innerHTML = `
+        <div class="${css({ display: 'flex' })}">
+            <div class="${css({
+                backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px', minWidth: '85px'
+            })}">
+                <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
+                <guilds-list></guilds-list>
+                <guilds-list-button button="join-guild"></guilds-list-button>
+                <guilds-list-button button="discovery"></guilds-list-button>
+            </div>
+            <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
+                <div class="${css({ display: 'flex' })}">
+                    <dms-list></dms-list>
+                </div>
+            </div>
+        </div>
+        `;
+    } else if (pathRegexps.dm.test(path) && typeof urlParts()[2] !== 'undefined') {
+        root.innerHTML = `
+        <div class="${css({ display: 'flex' })}">
+            <div class="${css({
+                backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px', minWidth: '85px'
+            })}">
+                <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
+                <guilds-list></guilds-list>
+                <guilds-list-button button="join-guild"></guilds-list-button>
+                <guilds-list-button button="discovery"></guilds-list-button>
+            </div>
+            <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
+                <div class="${css({ display: 'flex' })}">
+                    <dms-list></dms-list>
+                    <channel-messages></channel-messages>
+                </div>
+            </div>
+        </div>
+        `;
+    } else if (pathRegexps.channel.test(path) && typeof urlParts()[2] !== 'undefined') {
+        root.innerHTML = `
+        <div class="${css({ display: 'flex' })}">
+            <div class="${css({
+                backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px', minWidth: '85px'
+            })}">
+                <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
+                <guilds-list></guilds-list>
+                <guilds-list-button button="join-guild"></guilds-list-button>
+                <guilds-list-button button="discovery"></guilds-list-button>
+            </div>
+            <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
+                <div class="${css({ display: 'flex' })}">
+                    <channels-list guild-id="${guildId}"></channels-list>
+                    <channel-messages></channel-messages>
+                </div>
+            </div>
+        </div>
+        `;
+    } else if (pathRegexps.guild.test(path)) {
+        const firstChannel = (await guildChannels(guildId))?.find(ch => ch.type !== 4 && ch.type !== 2)?.id;
+        navigateTo(`/channels/${guildId}/${firstChannel}`);
+    }
+})();
