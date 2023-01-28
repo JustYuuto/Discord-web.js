@@ -2,11 +2,13 @@ import { urlParts } from '../helpers/url';
 import { css } from '@emotion/css';
 import hljs from 'highlight.js/lib/common';
 import 'highlight.js/styles/atom-one-dark.css';
+import Component from './Component';
 
-export default class Markdown extends HTMLElement {
+export default class Markdown extends Component {
 
     connectedCallback() {
         let text = this.innerHTML;
+        let isEmbed = this.getOptionalAttribute('embed', false);
         console.log(text)
 
         text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
@@ -25,6 +27,9 @@ export default class Markdown extends HTMLElement {
         text = text.replaceAll(this.regex('italic'), '<em>$1</em>');
         text = text.replaceAll(this.regex('underline'), '<u>$1</u>');
         text = text.replaceAll(this.regex('blockquote'), '<blockquote>$1</blockquote>');
+        text = isEmbed ?
+            text.replaceAll(this.regex('link_with_text'), '<a href="http$2://$3$5.$6/$7" target="_blank">$1</a>') :
+            text.replaceAll(this.regex('link'), '<a href="$1" target="_blank">$1</a>');
         text = text.replaceAll(this.regex('custom_emoji'), (_match, $1: string, $2: string, $3: string) => {
             return `<img src="https://cdn.discordapp.com/emojis/${$3}.${$1 === 'a' ? 'gif' : 'png'}?size=44&quality=lossless" alt=":${$2}:" title=":${$2}:" draggable="false" />`;
         });
