@@ -7,7 +7,10 @@ export default class GuildsList extends HTMLElement {
         guilds().then(guilds => {
             let html = '';
             guilds.forEach(guild => {
-                const iconCss = css({ borderRadius: '50%', userSelect: 'none', transition: '.2s', ':hover': { borderRadius: '.75rem' } });
+                const iconCss = css({
+                    borderRadius: '50%', userSelect: 'none', transition: '.2s', ':hover': { borderRadius: '.75rem' },
+                    width: '48px', height: '48px'
+                });
                 html += `<div class="${css({ marginTop: '4px', marginBottom: '4px' })}">`;
                 html += `<a href="/channels/${guild.id}" class="${css({ ':hover': { textDecoration: 'none' } })}">`;
                 if (!!guild.icon) {

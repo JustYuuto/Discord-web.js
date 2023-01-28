@@ -1,7 +1,7 @@
 import { dms } from '../../helpers/api';
 import { css } from '@emotion/css';
 import Component from '../Component';
-import { avatarURL, groupAvatarURL } from '../../helpers/image';
+import { avatarImgHTML, avatarURL, groupAvatarURL } from '../../helpers/image';
 
 export default class DMsList extends Component {
 
@@ -9,7 +9,6 @@ export default class DMsList extends Component {
         dms().then(dms => {
             let html = '';
             dms.forEach(dm => {
-                console.log(dm);
                 const channelLinkAndCatCss = css({ color: '#96989d', display: 'flex', cursor: 'pointer', overflow: 'hidden' });
                 html += `<div class="${css({ marginTop: '4px', marginBottom: '4px', display: 'flex' })}">`;
                 html += `<a href="/channels/@me/${dm.id}" class="${css([
@@ -19,14 +18,10 @@ export default class DMsList extends Component {
                 ])}">`;
                 html += `<div class="${css({ display: 'flex', alignItems: 'center' })}">`;
                 if (dm.type === 3) { // @ts-ignore
-                    html += `<img src="${groupAvatarURL(dm.id, dm.icon)}" alt="" class="${css({
-                        borderRadius: '9999px', width: '32px', height: '32px'
-                    })}" draggable="false" />`;
+                    html += avatarImgHTML(groupAvatarURL(dm.id, dm.icon), 32);
                 } else {
                     const recipient = dm.recipients[0];
-                    html += `<img src="${avatarURL(recipient.id, recipient.avatar, recipient.discriminator, 32)}" class="${css({
-                        borderRadius: '9999px', width: '32px', height: '32px'
-                    })}" alt="" draggable="false" />`;
+                    html += avatarImgHTML(avatarURL(recipient.id, recipient.avatar, recipient.discriminator, 32), 32);
                 }
                 html += `</div>`;
                 html += `<div class="${css({ display: 'flex', flexDirection: 'column', justifyContent: 'center' })}">`;
