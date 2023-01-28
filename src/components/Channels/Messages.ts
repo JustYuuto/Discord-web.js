@@ -8,12 +8,12 @@ export default class ChannelMessages extends HTMLElement {
 
     connectedCallback() {
         channelMessages(urlParts()[2]).then(messages => {
-            let html = '';
-            html += `<div class="${css({ height: '100vh', overflow: 'hidden scroll' })}">`;
+            let html = `<div class="${css({ height: '100vh', overflow: 'hidden scroll' })}">`;
             messages.forEach(message => {
-                const messageActions = [];
-                messageActions.push({ icon: 'reply', text: 'Reply' });
-                messageActions.push({ icon: 'id', text: 'Copy ID', onClick: `copyText("${message.id}")` });
+                const messageActions = [
+                    { icon: 'reply', text: 'Reply' },
+                    { icon: 'id', text: 'Copy ID', onClick: `copyText("${message.id}")` }
+                ];
                 const mentionned = (message.mention_everyone || typeof message.mentions.find(u => u.id === message.author.id) !== 'undefined');
                 const messageActionsCss = css({ display: 'none', '> :first-of-type': {
                         borderBottomLeftRadius: '0.25rem', borderTopLeftRadius: '0.25rem'
@@ -62,7 +62,7 @@ export default class ChannelMessages extends HTMLElement {
             });
             html += `</div>`;
             this.classList.add(css({
-                width: 'calc(100% - 282px)', height: '100%', backgroundColor: '#36393f', color: 'white', position: 'relative'
+                width: '100%', height: '100%', backgroundColor: '#36393f', color: 'white', position: 'relative'
             }));
             this.innerHTML = html;
         });
