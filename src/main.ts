@@ -8,12 +8,14 @@ import { guildChannels, tokenTest } from './helpers/api';
 import GuildsList from './components/Guilds/List';
 import { css } from '@emotion/css';
 import ChannelMessages from './components/Channels/Messages';
-// import DMsMessages from './components/DMs/Messages';
 import Icon from './components/Icon';
 import Markdown from './components/Markdown';
 import UserMention from './components/Interactive/Mentions/User';
 import RoleMention from './components/Interactive/Mentions/Role';
 import GuildsListButton from './components/Guilds/ListButton';
+import MessageReaction from './components/Message/Reaction';
+import MessageAction from './components/Message/Action';
+import { copyText } from './helpers/text';
 
 customElements.define('channels-list', ChannelsList);
 customElements.define('dms-list', DMsList);
@@ -24,6 +26,8 @@ customElements.define('svg-icon', Icon);
 customElements.define('markdown-text', Markdown);
 customElements.define('user-mention', UserMention);
 customElements.define('role-mention', RoleMention);
+customElements.define('message-reaction', MessageReaction);
+customElements.define('message-action', MessageAction);
 
 const path = window.location.pathname;
 const root = document.querySelector<HTMLDivElement>('#app');
@@ -109,3 +113,9 @@ const pathRegexps = {
         navigateTo(`/channels/${guildId}/${firstChannel}`);
     }
 })();
+
+window.copyText = copyText;
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+}

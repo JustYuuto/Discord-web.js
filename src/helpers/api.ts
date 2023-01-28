@@ -80,6 +80,13 @@ export async function addReaction(messageId: string | number, emoji: string): Pr
     return;
 }
 
+export async function removeReaction(messageId: string | number, emoji: string): Promise<void> {
+    await fetch(`${apiBase}/channels/${urlParts()[2]}/messages/${messageId}/reactions/${emoji}/@me`, {
+        headers: { Authorization: token }, method: 'DELETE'
+    });
+    return;
+}
+
 interface Channel {
     id: number,
     type: ChannelType,

@@ -2,6 +2,7 @@ import { channelMessages } from '../../helpers/api';
 import { css } from '@emotion/css';
 import { urlParts } from '../../helpers/url';
 import moment from 'moment';
+import { avatarImgHTML, avatarURL } from '../../helpers/image';
 
 export default class ChannelMessages extends HTMLElement {
 
@@ -12,7 +13,7 @@ export default class ChannelMessages extends HTMLElement {
             messages.forEach(message => {
                 const messageActions = [];
                 messageActions.push({ icon: 'reply', text: 'Reply' });
-                messageActions.push({ icon: 'id', text: 'Copy ID' });
+                messageActions.push({ icon: 'id', text: 'Copy ID', onClick: `copyText("${message.id}")` });
                 const mentionned = (message.mention_everyone || typeof message.mentions.find(u => u.id === message.author.id) !== 'undefined');
                 const messageActionsCss = css({ display: 'none', '> :first-of-type': {
                         borderBottomLeftRadius: '0.25rem', borderTopLeftRadius: '0.25rem'
@@ -28,10 +29,10 @@ export default class ChannelMessages extends HTMLElement {
                         }
                     },
                 }, mentionned && { backgroundColor: '#4b443b' }])}">`;
-                html += `<img src="https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.webp?size=48" 
-                              draggable="false" alt="" class="${css({
-                                  marginRight: '8px', borderRadius: '9999px', width: '48px', height: '48px'
-                              })}" />`;
+                html += avatarImgHTML(
+                    avatarURL(message.author.id, message.author.avatar, message.author.discriminator, 48), 48,
+                    { marginRight: '8px' }
+                );
                 html += `<div>`;
                 html += `<div class="${css({
                     marginBottom: '5px', display: 'flex', alignItems: 'center',
@@ -43,34 +44,17 @@ export default class ChannelMessages extends HTMLElement {
                 html += `<div class="${css({ width: 'fit-content' })}">`;
                 html += `<markdown-text>${message.content.replaceAll('"', '&quot;').replaceAll('<', '&lt;')}</markdown-text>`;
                 if (message.reactions && message.reactions.length !== 0) {
-                    html += `<div class="${css({ display: 'flex', gap: '5px' })}">`;
-                    html += message.reactions.map(reaction => {
-                        const reactionCss = css({
-                            cursor: 'pointer', padding: '4px 6px', borderStyle: 'solid', borderColor: 'rgba(0,0,0,0)', borderWidth: '1px',
-                            borderRadius: '.25rem', userSelect: 'none', ':hover': { borderColor: '#4f5257' }, backgroundColor: '#2f3136'
-                        }, reaction.me && { backgroundColor: '#3b405a', borderColor: '#5561e3', ':hover': { borderColor: '#5561e3' } });
-                        let html = `<div class="${reactionCss}">`;
-                        html += `${reaction.emoji.id ? `<img src="https://cdn.discordapp.com/emojis/${reaction.emoji.id}.${reaction.emoji.animated ? 'gif' : 'png'}?size=16" alt="" draggable="false" />` : reaction.emoji.name}&nbsp;${reaction.count}`;
-                        html += '</div>';
-                        document.addEventListener('DOMContentLoaded', () => {
-                            console.log(reactionCss)
-                            console.log(this.querySelector(`.${reactionCss}`))
-                            this.querySelectorAll(`.${reactionCss}`).forEach(e => e.addEventListener('click', (e) => {
-                                console.log(e);
-                            }));
-                        })
-                        return html;
-                    }).join('');
+                    html += `<div class="${css({ display: 'flex', gap: '5px', marginTop: '5px' })}">`;
+                    html += message.reactions
+                        .map(reaction =>
+                            `<message-reaction me="${reaction.me}" count="${reaction.count}" emoji='${JSON.stringify(reaction.emoji)}' message-id="${message.id}"></message-reaction>`)
+                        .join('');
                     html += `</div>`;
                 }
                 html += `</div>`;
                 html += `<div class="${messageActionsCss}">`;
                 html += messageActions.map(action => {
-                    return `<div class="${css({
-                        padding: '5px', margin: 0, backgroundColor: '#36393f', height: '28px', width: '28px',
-                        display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer',
-                        ':hover': { backgroundColor: '#40444b' }
-                    })}"><svg-icon icon="${action.icon}" width="20" height="20" class="${css({ margin: 0, padding: 0 })}"></svg-icon></div>`;
+                    return `<message-action icon="${action.icon}" text="${action.text}" on-click='${action.onClick?.toString()}'></message-action>`;
                 }).join('');
                 html += `</div>`;
                 html += `</div>`;
