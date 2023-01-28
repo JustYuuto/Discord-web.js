@@ -6,8 +6,8 @@ export default class Component extends HTMLElement {
         return attribute;
     }
 
-    getOptionalAttribute(qualifiedName: string, defaultValue: string | number | boolean): string {
-        return super.getAttribute(qualifiedName) || defaultValue.toString();
+    getOptionalAttribute(qualifiedName: string, defaultValue: any): any {
+        return super.getAttribute(qualifiedName) || defaultValue;
     }
 
 }

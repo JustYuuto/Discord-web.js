@@ -8,7 +8,7 @@ export default class Markdown extends Component {
 
     connectedCallback() {
         let text = this.innerHTML;
-        let isEmbed = this.getOptionalAttribute('embed', false);
+        const isEmbed = this.getOptionalAttribute('embed', false);
         console.log(text)
 
         text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
