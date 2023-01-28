@@ -114,6 +114,7 @@ const pathRegexps = {
     }
 })();
 
+// @ts-ignore
 window.copyText = copyText;
 
 if ('serviceWorker' in navigator) {
