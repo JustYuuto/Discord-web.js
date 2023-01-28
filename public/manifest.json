@@ -1,0 +1,15 @@
+{
+  "name": "Discord Web.js",
+  "description": "Discord Web app remade with only Vanilla JS",
+  "start_url": "/app?utm_source=pwa",
+  "background_color": "#202225",
+  "id": "/app?utm_source=pwa",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "https://cdn.discordapp.com/embed/avatars/0.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ]
+}
