@@ -16,6 +16,8 @@ import GuildsListButton from './components/Guilds/ListButton';
 import MessageReaction from './components/Message/Reaction';
 import MessageAction from './components/Message/Action';
 import { copyText } from './helpers/text';
+import MessageAttachment from './components/Message/Attachment';
+import MessageEmbed from './components/Message/Embed';
 
 customElements.define('channels-list', ChannelsList);
 customElements.define('dms-list', DMsList);
@@ -28,6 +30,8 @@ customElements.define('user-mention', UserMention);
 customElements.define('role-mention', RoleMention);
 customElements.define('message-reaction', MessageReaction);
 customElements.define('message-action', MessageAction);
+customElements.define('message-attachment', MessageAttachment);
+customElements.define('message-embed', MessageEmbed);
 
 const path = window.location.pathname;
 const root = document.querySelector<HTMLDivElement>('#app');
