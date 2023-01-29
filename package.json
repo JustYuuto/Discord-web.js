@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@emotion/css": "^11.10.5",
+    "filesize": "^10.0.6",
     "highlight.js": "^11.7.0",
     "moment": "^2.29.4",
     "normalize.css": "^8.0.1"
