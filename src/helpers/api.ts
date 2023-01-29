@@ -1,13 +1,12 @@
-import { urlParts } from './url';
+import {urlParts} from './url';
 
 const apiBase = 'https://discord.com/api/v10';
 const token = localStorage.getItem('token') || '';
 
-export async function tokenTest(token: string): Promise<number> {
-  const req = await fetch(`${apiBase}/users/@me`, {
+export async function tokenTest(token: string): Promise<Response> {
+  return await fetch(`${apiBase}/users/@me`, {
     headers: { Authorization: token }
   });
-  return req.status;
 }
 
 export async function user(id: number | string): Promise<User> {
@@ -113,13 +112,17 @@ interface Message {
   embeds: Embed[]
 }
 
-interface User {
+export interface User {
   id: number,
   avatar: string,
   username: string,
   discriminator: number,
   system?: boolean,
-  bot?: boolean
+  bot?: boolean,
+  locale:
+    'id' | 'da' | 'de' | 'en-GB' | 'en-US' | 'es-ES' | 'fr' | 'hr' | 'it' | 'lt' | 'hu' | 'nl' | 'no' | 'pl' |
+    'pt-BR' | 'ro' | 'fi' | 'sv-SE' | 'vi' | 'tr' | 'cs' | 'el' | 'bg' | 'ru' | 'uk' | 'hi' | 'th' | 'zh-CN' | 'ja' |
+    'zh-TW' | 'ko'
 }
 
 export interface Role {
