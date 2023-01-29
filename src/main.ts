@@ -44,7 +44,7 @@ const pathRegexps = {
 };
 
 if (localStorage.getItem('locale') !== null) { // @ts-ignore
-  moment.locale(localStorage.getItem('locale'));
+  moment.locale(localStorage.getItem('locale')); // @ts-ignore
   document.querySelector('html')?.setAttribute('lang', localStorage.getItem('locale'));
 }
 
