@@ -41,7 +41,7 @@ export default class ChannelMessages extends HTMLElement {
           '*': { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }
         })}">`;
         html += `<span>${message.author.username}</span>&nbsp;`;
-        html += `<small>${moment(message.timestamp).format('DD/MM/YYYY [at] HH:mm:ss')}${message.edited_timestamp ? `&nbsp;(edited ${moment(message.edited_timestamp).format('DD/MM/YYYY [at] HH:mm:ss')})` : ''}</small>`;
+        html += `<small>${moment(message.timestamp).calendar()}${message.edited_timestamp ? `&nbsp;(edited ${moment(message.edited_timestamp).calendar()})` : ''}</small>`;
         html += `</div>`;
         html += `<div class="${css({ width: 'fit-content' })}">`;
         html += `<markdown-text>${message.content.replaceAll('"', '&quot;').replaceAll('<', '&lt;')}</markdown-text>`;
