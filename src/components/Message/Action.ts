@@ -15,7 +15,7 @@ export default class MessageAction extends Component {
         this.setAttribute('aria-label', text);
         this.setAttribute('role', 'button');
         this.classList.add(actionCss);
-        this.innerHTML = `<svg-icon icon="${icon}" width="20" height="20" class="${css({ margin: 0, padding: 0 })}"></svg-icon>`;
+        this.innerHTML = `<svg-icon icon="${icon}" width="24" height="24" class="${css({ margin: 0, padding: 0 })}"></svg-icon>`;
         this.addEventListener('click', () => eval(onClick));
     }
 
