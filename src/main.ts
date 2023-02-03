@@ -63,6 +63,7 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
         if (req.status === 200) {
           const user: User = await req.json();
           localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(user));
           localStorage.setItem('locale', user.locale);
           navigateTo('/app');
         }
