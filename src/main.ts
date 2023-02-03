@@ -20,6 +20,7 @@ import MessageAttachment from './components/Message/Attachment';
 import MessageEmbed from './components/Message/Embed';
 import moment from 'moment';
 import ChannelLink from './components/Interactive/ChannelLink';
+import { initTitlePopups } from './helpers/popups';
 
 customElements.define('channels-list', ChannelsList);
 customElements.define('dms-list', DMsList);
@@ -45,7 +46,7 @@ const pathRegexps = {
   dm: /\/channels\/@me\/([0-9]{18,19})/gi,
 };
 
-if (!localStorage.getItem('token')) {
+if (path !== '/login' && !localStorage.getItem('token')) {
   navigateTo('/login');
 }
 if (localStorage.getItem('locale') !== null) { // @ts-ignore
@@ -146,6 +147,10 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
     const firstChannel = (await guildChannels(guildId))?.find(ch => ch.type !== 4 && ch.type !== 2)?.id;
     navigateTo(`/channels/${guildId}/${firstChannel}`);
   }
+
+  setTimeout(() => {
+    initTitlePopups();
+  }, 1000);
 })();
 
 // @ts-ignore

@@ -19,3 +19,27 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.tippy-box[data-theme~='discord'] {
+  background-color: #18191c;
+}
+
+.tippy-box[data-theme~='discord'] > .tippy-svg-arrow {
+  fill: #18191c;
+}
+
+.tippy-box[data-theme~='discord'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #18191c;
+}
+
+.tippy-box[data-theme~='discord'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #18191c;
+}
+
+.tippy-box[data-theme~='discord'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #18191c;
+}
+
+.tippy-box[data-theme~='discord'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #18191c;
+}
