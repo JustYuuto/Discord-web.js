@@ -146,5 +146,5 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
 window.copyText = copyText;
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js');
+  // navigator.serviceWorker.register('/sw.js');
 }
