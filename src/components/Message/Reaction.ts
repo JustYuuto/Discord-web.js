@@ -10,6 +10,8 @@ export default class MessageReaction extends Component {
     const messageId = this.getAttribute('message-id');
     let count = Number(this.getAttribute('count'));
     const emoji: Emoji = JSON.parse(this.getAttribute('emoji'));
+    console.log(emoji);
+    this.setAttribute('title', `${emoji.id ? `:${emoji.name}:` : emoji.name} reaction`);
     const meCss = css({
       backgroundColor: '#3b405a !important', borderColor: '#5561e3 !important', ':hover': { borderColor: '#5561e3' }
     });
@@ -20,17 +22,17 @@ export default class MessageReaction extends Component {
     });
     this.classList.add(reactionCss);
     me && this.classList.add(meCss);
-    this.innerHTML = `${emoji.id ? `<img src="${emojiURL(emoji.id, emoji.animated)}" alt="" draggable="false" class="${css({
+    this.innerHTML = (emoji.id ? `<img src="${emojiURL(emoji.id, emoji.animated)}" alt=":${emoji.name}:" draggable="false" class="${css({
       width: '16px', height: '16px'
-    })}" />` : emoji.name}&nbsp;${count}`;
+    })}" />` : emoji.name) + `&nbsp;${count}`;
     this.addEventListener('click', async () => {
       const emojiName = emoji.id ? `${emoji.name}:${emoji.id}` : emoji.name;
+      const emojiHTML = emoji.id ? `<img src="${emojiURL(emoji.id, emoji.animated)}" alt=":${emoji.name}:" draggable="false" />` : emoji.name;
       if (!me) {
         await addReaction(messageId, emojiName).then(() => {
           this.classList.add(meCss);
           count++;
           me = true;
-          const emojiHTML = emoji.id ? `<img src="${emojiURL(emoji.id, emoji.animated)}" alt="" draggable="false" />` : emoji.name;
           this.innerHTML = `${emojiHTML}&nbsp;${count}`;
         });
       } else {
@@ -41,7 +43,6 @@ export default class MessageReaction extends Component {
           if (count === 0) {
             this.remove();
           } else {
-            const emojiHTML = emoji.id ? `<img src="${emojiURL(emoji.id, emoji.animated)}" alt="" draggable="false" />` : emoji.name;
             this.innerHTML = `${emojiHTML}&nbsp;${count}`;
           }
         });
