@@ -19,6 +19,7 @@ import { copyText } from './helpers/text';
 import MessageAttachment from './components/Message/Attachment';
 import MessageEmbed from './components/Message/Embed';
 import moment from 'moment';
+import ChannelLink from './components/Interactive/ChannelLink';
 
 customElements.define('channels-list', ChannelsList);
 customElements.define('dms-list', DMsList);
@@ -33,6 +34,7 @@ customElements.define('message-reaction', MessageReaction);
 customElements.define('message-action', MessageAction);
 customElements.define('message-attachment', MessageAttachment);
 customElements.define('message-embed', MessageEmbed);
+customElements.define('channel-link', ChannelLink);
 
 const path = window.location.pathname;
 const root = document.querySelector<HTMLDivElement>('#app');
@@ -43,6 +45,9 @@ const pathRegexps = {
   dm: /\/channels\/@me\/([0-9]{18,19})/gi,
 };
 
+if (!localStorage.getItem('token')) {
+  navigateTo('/login');
+}
 if (localStorage.getItem('locale') !== null) { // @ts-ignore
   moment.locale(localStorage.getItem('locale')); // @ts-ignore
   document.querySelector('html')?.setAttribute('lang', localStorage.getItem('locale'));
@@ -50,9 +55,9 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
 
 (async () => {
   const guildId = urlParts()[1];
-  const token = new URLSearchParams(window.location.search).get('token');
 
   if (path === '/login') {
+    const token = new URLSearchParams(window.location.search).get('token');
     if (token !== null) {
       tokenTest(token).then(async req => {
         if (req.status === 200) {
@@ -67,7 +72,7 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
     navigateTo('/channels/@me');
   } else if (path === '/channels/@me') {
     root.innerHTML = `
-        <div class="${css({display: 'flex'})}">
+        <div class="${css({ display: 'flex' })}">
             <div class="${css({
       backgroundColor: '#202225',
       overflow: 'hidden scroll',
@@ -76,13 +81,13 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
       maxWidth: '85px',
       minWidth: '85px'
     })}">
-                <div class="${css({height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px'})}"></div>
+                <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
                 <guilds-list></guilds-list>
                 <guilds-list-button button="join-guild"></guilds-list-button>
                 <guilds-list-button button="discovery"></guilds-list-button>
             </div>
-            <div class="${css({display: 'flex', flexDirection: 'column', width: '100%'})}">
-                <div class="${css({display: 'flex'})}">
+            <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
+                <div class="${css({ display: 'flex' })}">
                     <dms-list></dms-list>
                 </div>
             </div>
@@ -90,7 +95,7 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
         `;
   } else if (pathRegexps.dm.test(path) && typeof urlParts()[2] !== 'undefined') {
     root.innerHTML = `
-        <div class="${css({display: 'flex'})}">
+        <div class="${css({ display: 'flex' })}">
             <div class="${css({
       backgroundColor: '#202225',
       overflow: 'hidden scroll',
@@ -99,13 +104,13 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
       maxWidth: '85px',
       minWidth: '85px'
     })}">
-                <div class="${css({height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px'})}"></div>
+                <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
                 <guilds-list></guilds-list>
                 <guilds-list-button button="join-guild"></guilds-list-button>
                 <guilds-list-button button="discovery"></guilds-list-button>
             </div>
-            <div class="${css({display: 'flex', flexDirection: 'column', width: '100%'})}">
-                <div class="${css({display: 'flex'})}">
+            <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
+                <div class="${css({ display: 'flex' })}">
                     <dms-list></dms-list>
                     <channel-messages></channel-messages>
                 </div>
@@ -114,7 +119,7 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
         `;
   } else if (pathRegexps.channel.test(path) && typeof urlParts()[2] !== 'undefined') {
     root.innerHTML = `
-        <div class="${css({display: 'flex'})}">
+        <div class="${css({ display: 'flex' })}">
             <div class="${css({
       backgroundColor: '#202225',
       overflow: 'hidden scroll',
@@ -123,13 +128,13 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
       maxWidth: '85px',
       minWidth: '85px'
     })}">
-                <div class="${css({height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px'})}"></div>
+                <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
                 <guilds-list></guilds-list>
                 <guilds-list-button button="join-guild"></guilds-list-button>
                 <guilds-list-button button="discovery"></guilds-list-button>
             </div>
-            <div class="${css({display: 'flex', flexDirection: 'column', width: '100%'})}">
-                <div class="${css({display: 'flex'})}">
+            <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
+                <div class="${css({ display: 'flex' })}">
                     <channels-list guild-id="${guildId}"></channels-list>
                     <channel-messages></channel-messages>
                 </div>
