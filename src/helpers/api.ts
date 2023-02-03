@@ -179,5 +179,12 @@ export interface Embed {
   },
   timestamp: Date,
   type: 'rich' | 'image' | 'video' | 'gifv' | 'article' | 'link',
-  url: string
+  url: string,
+  color: string,
+  author?: {
+    icon_url?: string,
+    proxy_icon_url?: string,
+    name: string,
+    url?: string
+  }
 }
