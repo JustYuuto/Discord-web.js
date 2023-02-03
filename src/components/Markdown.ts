@@ -4,6 +4,7 @@ import hljs from 'highlight.js/lib/common';
 import 'highlight.js/styles/atom-one-dark.css';
 import Component from './Component';
 import moment from 'moment';
+import { emojiURL } from '../helpers/image';
 
 export default class Markdown extends Component {
 
@@ -11,7 +12,7 @@ export default class Markdown extends Component {
     let text = this.getOptionalAttribute('text', undefined);
     if (!text) return;
     const isEmbed = this.getOptionalAttribute('embed', false) === 'true';
-    console.log(text)
+    console.log(text);
 
     text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
     text = text.replaceAll('\n', '<br />');
@@ -34,7 +35,7 @@ export default class Markdown extends Component {
       text.replaceAll(this.regex('link_with_text'), '<a href="$2" target="_blank">$1</a>') :
       text.replaceAll(this.regex('link'), '<a href="$1" target="_blank">$1</a>');
     text = text.replaceAll(this.regex('custom_emoji'), (_match: any, $1: string, $2: string, $3: string) => {
-      return `<img src="https://cdn.discordapp.com/emojis/${$3}.${$1 === 'a' ? 'gif' : 'png'}?size=44&quality=lossless" alt=":${$2}:" title=":${$2}:" draggable="false" />`;
+      return `<img src="${emojiURL($3, $1 === 'a', 44, 'lossless')}" alt=":${$2}:" title=":${$2}:" draggable="false" />`;
     });
     text = text.replaceAll(this.regex('channel'), `<channel-link id="$2"></channel-link>`);
     text = text.replaceAll(this.regex('user_mention'), '<user-mention id="$3"></user-mention>');
@@ -66,7 +67,7 @@ export default class Markdown extends Component {
       }
       return html(text);
     });
-    console.log(text)
+    console.log(text);
     console.log('-----------------------------------------------------');
 
     this.classList.add(css({
