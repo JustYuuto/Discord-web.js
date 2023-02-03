@@ -1,21 +1,35 @@
 import Component from '../Component';
 import { css } from '@emotion/css';
 import moment from 'moment';
+import { Embed } from '../../helpers/api';
 
 export default class MessageEmbed extends Component {
 
-  connectedCallback() { // @ts-ignore
+  connectedCallback() {
     const embed: Embed = JSON.parse(this.getAttribute('embed'));
-    console.log(embed)
     let html = '<div>';
+    if (embed.author && embed.author?.icon_url) {
+      html += `<div class="${css({
+        display: 'flex', alignItems: 'center', padding: '12px 12px 0 12px', fontSize: '.875rem', gap: '7px'
+      })}">`;
+      html += `<img src="${embed.author?.proxy_icon_url}" class="${css({ width: '24px', height: '24px', borderRadius: '9999px' })}" alt />`;
+      if (embed.author.url) {
+        html += `<a class="${css({
+          color: '#fff'
+        })}" href="${embed.author.url}" target="_blank">${embed.author.name}</a>`;
+      } else {
+        html += `<span>${embed.author.name}</span>`;
+      }
+      html += '</div>';
+    }
     html += `<div class="${css({ display: 'grid', padding: '12px' })}">`;
     if (embed.title) {
       if (embed.url) html += `<a href="${embed.url}" target="_blank">`;
-      html += `<markdown-text class="${css({ fontSize: '16px', fontWeight: 600 })}">${embed.title}</markdown-text>`;
+      html += `<markdown-text text="${embed.title?.replaceAll('"', '&quot;')}" class="${css({ fontSize: '16px', fontWeight: 600 })}"></markdown-text>`;
       if (embed.url) html += `</a>`;
     }
     if (embed.description) html +=
-      `<markdown-text class="${css({ fontSize: '.875rem', fontWeight: 400, marginTop: '2px' })}" embed="true">${embed.description?.replaceAll('"', '&quot;')}</markdown-text>`;
+      `<markdown-text text="${embed.description?.replaceAll('"', '&quot;')}" class="${css({ fontSize: '.875rem', fontWeight: 400, marginTop: '2px' })}" embed="true"></markdown-text>`;
     html += '</div>';
     if (embed.footer || embed.timestamp) {
       html += `<div class="${css({
