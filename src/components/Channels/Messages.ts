@@ -8,32 +8,27 @@ export default class ChannelMessages extends HTMLElement {
 
   connectedCallback() {
     channelMessages(urlParts()[2]).then(messages => {
-      let html = `<div class="${css({height: '100vh', overflow: 'hidden scroll'})}">`;
+      let html = `<div class="${css({ height: '100vh', overflow: 'hidden scroll' })}">`;
       messages.forEach(message => {
         const messageActions = [
           { icon: 'reply', text: 'Reply' },
           { icon: 'id', text: 'Copy ID', onClick: `copyText("${message.id}")` }
-        ];
-        const mentionned = (message.mention_everyone || typeof message.mentions.find(u => u.id === message.author.id) !== 'undefined');
+        ]; // @ts-ignore
+        const mentionned = (message.mention_everyone || typeof message.mentions.find(u => u.id === JSON.parse(localStorage.getItem('user')).id) !== 'undefined');
         const messageActionsCss = css({
-          display: 'none', '> :first-of-type': {
-            borderBottomLeftRadius: '0.25rem', borderTopLeftRadius: '0.25rem'
-          }, '> :last-of-type': {
-            borderBottomRightRadius: '0.25rem', borderTopRightRadius: '0.25rem'
-          }, borderColor: '#2f3237', borderWidth: '1px', borderStyle: 'solid'
+          display: 'none', borderColor: '#2f3237', borderWidth: '1px', borderStyle: 'solid',
+          '> :first-of-type': { borderBottomLeftRadius: '0.25rem', borderTopLeftRadius: '0.25rem' },
+          '> :last-of-type': { borderBottomRightRadius: '0.25rem', borderTopRightRadius: '0.25rem' }
         });
         html += `<div class="${css([{
           display: 'flex', padding: '5px 15px', margin: '10px 0', position: 'relative',
           ':hover': {
             backgroundColor: mentionned ? 'rgba(75,68,59,0.7)' : '#32353b',
-            [`.${messageActionsCss}`]: {
-              position: 'absolute', right: '20px', top: '-13px', display: 'flex'
-            }
+            [`.${messageActionsCss}`]: { position: 'absolute', right: '20px', top: '-13px', display: 'flex' }
           },
         }, mentionned && { backgroundColor: '#4b443b' }])}">`;
         html += avatarImgHTML(
-          avatarURL(message.author.id, message.author.avatar, message.author.discriminator, 48), 48,
-          { marginRight: '8px' }
+          avatarURL(message.author.id, message.author.avatar, message.author.discriminator, 48), 48, { marginRight: '8px' }
         );
         html += `<div>`;
         html += `<div class="${css({
@@ -50,9 +45,7 @@ export default class ChannelMessages extends HTMLElement {
         html += `<markdown-text text="${message.content.replaceAll('"', '&quot;')}">`;
         if (message.edited_timestamp) html += `<span class="${css({
           fontSize: '.75rem', color: '#888a8c'
-        })}">&nbsp;(edited ${moment(message.edited_timestamp).calendar({
-          sameElse: 'MM/DD/YYYY hh:mm:ss A'
-        })})</span>`;
+        })}">&nbsp;(edited ${moment(message.edited_timestamp).calendar({ sameElse: 'MM/DD/YYYY hh:mm:ss A' })})</span>`;
         html += `</markdown-text></span>`;
         if (message.embeds && message.embeds.length !== 0) {
           html += message.embeds
