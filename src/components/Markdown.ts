@@ -43,15 +43,14 @@ export default class Markdown extends Component {
     text = text.replaceAll('@everyone', `<role-mention id="${urlParts()[1]}"></role-mention>`);
     text = text.replaceAll('@here', '<role-mention id="@here"></role-mention>');
     text = text.replaceAll(this.regex('timestamp'), (_match: any, $1: string, $2: string) => {
+      const timestamp = Number($1) * 1000;
       let html = (time: string) => `<span class="${css({
         backgroundColor: '#42464d', borderRadius: '3px', padding: '0 2px', ':hover': { backgroundColor: '#3c4046' }
-      })}">${time}</span>`;
-      const timestamp = Number($1) * 1000;
+      })}" title="${moment(timestamp).format('LLLL')}">${time}</span>`;
       // https://gist.github.com/LeviSnoot/d9147767abeef2f770e9ddcd91eb85aa
       switch ($2) {
         case 't': // short time
-          text = moment(timestamp).format('h:mm A');
-          break;
+          text = moment(timestamp).format('h:mm A'); break;
         case 'T': // long time
           text = moment(timestamp).format('h:mm:ss A'); break;
         case 'd': // short date
