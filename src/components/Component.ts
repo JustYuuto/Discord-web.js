@@ -1,13 +1,11 @@
 export default class Component extends HTMLElement {
 
-    getAttribute(qualifiedName: string): string {
-        const attribute = super.getAttribute(qualifiedName);
-        if (!attribute) throw new Error(`No attribute ${qualifiedName} found`);
-        return attribute;
-    }
+  getAttribute(qualifiedName: string, defaultValue?: any): string {
+    return super.getAttribute(qualifiedName) || defaultValue;
+  }
 
-    getOptionalAttribute(qualifiedName: string, defaultValue: any): any {
-        return super.getAttribute(qualifiedName) || defaultValue;
-    }
+  getOptionalAttribute(qualifiedName: string, defaultValue: any): any {
+    return this.getAttribute(qualifiedName, defaultValue);
+  }
 
 }
