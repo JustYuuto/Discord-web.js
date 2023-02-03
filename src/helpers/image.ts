@@ -24,10 +24,10 @@ export function avatarImgHTML(url: string, sizes?: number, customCss?: Component
   }, customCss)}" />`;
 }
 
-export function emojiURL(id: number | string, animated: boolean, size: number = 16, quality: Emoji['quality']) {
+export function emojiURL(id: number | string, animated: boolean, size?: number, quality?: Emoji['quality']) {
   const params = new URLSearchParams();
-  params.append('size', size.toString());
-  params.append('quality', quality);
+  params.append('size', (size || 16).toString());
+  params.append('quality', quality || 'lossless');
   return `https://cdn.discordapp.com/emojis/${id}.${animated ? 'gif' : 'png'}?${params}`;
 }
 
