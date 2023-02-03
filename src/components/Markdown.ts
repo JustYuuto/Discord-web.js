@@ -62,13 +62,7 @@ export default class Markdown extends Component {
         case 'F': // long date/time
           text = moment(timestamp).format('LLLL'); break;
         case 'R': // relative
-          text = moment(timestamp).fromNow();
-          setInterval(() => {
-            console.log(text)
-            text = moment(timestamp).fromNow();
-            return html(text);
-          }, 1000);
-          return html(text);
+          text = moment(timestamp).fromNow(); break;
       }
       return html(text);
     });
