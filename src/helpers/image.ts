@@ -31,8 +31,8 @@ export function emojiURL(id: number | string, animated: boolean, size?: number, 
   return `https://cdn.discordapp.com/emojis/${id}.${animated ? 'gif' : 'png'}?${params}`;
 }
 
-export function guildIconURL(id: number | string, icon: string, animated: boolean, size: number = 48) {
+export function guildIconURL(id: number | string, icon: string, animated: boolean, size?: number) {
   const params = new URLSearchParams();
-  params.append('size', size.toString());
+  params.append('size', (size || 48).toString());
   return `https://cdn.discordapp.com/icons/${id}/${icon}.${animated ? 'gif' : 'png'}?${params}`;
 }
