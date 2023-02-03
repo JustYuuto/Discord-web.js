@@ -36,16 +36,16 @@ export default class ChannelMessages extends HTMLElement {
           '*': { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }
         })}">`;
         html += `<span>${message.author.username}</span>&nbsp;`;
-        html += `<span class="${css({ fontSize: '.75rem', color: '#92969a' })}">`;
-        html += moment(message.timestamp).calendar({ sameElse: 'MM/DD/YYYY hh:mm:ss A' });
+        html += `<span class="${css({ fontSize: '.75rem', color: '#92969a', userSelect: 'none' })}" title="${moment(message.timestamp).format('LLLL')}">`;
+        html += moment(message.timestamp).format('L LT');
         html += `</span>`;
         html += `</div>`;
         html += `<div class="${css({ width: 'fit-content' })}">`;
         html += `<span>`;
         html += `<markdown-text text="${message.content.replaceAll('"', '&quot;')}">`;
         if (message.edited_timestamp) html += `<span class="${css({
-          fontSize: '.75rem', color: '#888a8c'
-        })}">&nbsp;(edited ${moment(message.edited_timestamp).calendar({ sameElse: 'MM/DD/YYYY hh:mm:ss A' })})</span>`;
+          fontSize: '.75rem', color: '#888a8c', userSelect: 'none'
+        })}" title="${moment(message.edited_timestamp).format('LLLL')}">&nbsp;(edited)</span>`;
         html += `</markdown-text></span>`;
         if (message.embeds && message.embeds.length !== 0) {
           html += message.embeds
