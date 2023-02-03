@@ -12,7 +12,6 @@ export default class Markdown extends Component {
     let text = this.getOptionalAttribute('text', undefined);
     if (!text) return;
     const isEmbed = this.getOptionalAttribute('embed', false) === 'true';
-    console.log(text);
 
     text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
     text = text.replaceAll('\n', '<br />');
@@ -66,8 +65,6 @@ export default class Markdown extends Component {
       }
       return html(text);
     });
-    console.log(text);
-    console.log('-----------------------------------------------------');
 
     this.classList.add(css({
       wordBreak: 'break-word', display: 'block'

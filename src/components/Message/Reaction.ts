@@ -10,7 +10,6 @@ export default class MessageReaction extends Component {
     const messageId = this.getAttribute('message-id');
     let count = Number(this.getAttribute('count'));
     const emoji: Emoji = JSON.parse(this.getAttribute('emoji'));
-    console.log(emoji);
     this.setAttribute('title', `${emoji.id ? `:${emoji.name}:` : emoji.name} reaction`);
     const meCss = css({
       backgroundColor: '#3b405a !important', borderColor: '#5561e3 !important', ':hover': { borderColor: '#5561e3' }
