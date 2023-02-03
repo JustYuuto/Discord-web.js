@@ -12,7 +12,7 @@ export default class GuildsList extends HTMLElement {
           borderRadius: '50%', userSelect: 'none', transition: '.2s', ':hover': { borderRadius: '.75rem' },
           width: '48px', height: '48px'
         });
-        html += `<div class="${css({ marginTop: '4px', marginBottom: '4px' })}">`;
+        html += `<div class="${css({ marginTop: '4px', marginBottom: '4px' })}" title="${guild.name}" data-tooltip-position="right">`;
         html += `<a href="/channels/${guild.id}" class="${css({ ':hover': { textDecoration: 'none' } })}">`;
         if (!!guild.icon) {
           html += `<img src="${guildIconURL(guild.id, guild.icon, guild.icon.startsWith('a_'))}" alt="${guild.name}" class="${iconCss}" />`;
