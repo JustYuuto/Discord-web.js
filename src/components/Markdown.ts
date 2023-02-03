@@ -36,7 +36,7 @@ export default class Markdown extends Component {
     text = text.replaceAll(this.regex('custom_emoji'), (_match: any, $1: string, $2: string, $3: string) => {
       return `<img src="https://cdn.discordapp.com/emojis/${$3}.${$1 === 'a' ? 'gif' : 'png'}?size=44&quality=lossless" alt=":${$2}:" title=":${$2}:" draggable="false" />`;
     });
-    text = text.replaceAll(this.regex('channel'), `<a href="/channels/${urlParts()[1]}/$2">#aa</a>`);
+    text = text.replaceAll(this.regex('channel'), `<channel-link id="$2"></channel-link>`);
     text = text.replaceAll(this.regex('user_mention'), '<user-mention id="$3"></user-mention>');
     text = text.replaceAll(this.regex('role_mention'), `<role-mention id="$3"></role-mention>`);
     text = text.replaceAll('@everyone', `<role-mention id="${urlParts()[1]}"></role-mention>`);

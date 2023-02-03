@@ -1,4 +1,4 @@
-import {urlParts} from './url';
+import { urlParts } from './url';
 
 const apiBase = 'https://discord.com/api/v10';
 const token = localStorage.getItem('token') || '';
@@ -89,7 +89,8 @@ export async function removeReaction(messageId: string | number, emoji: string):
 interface Channel {
   id: number,
   type: ChannelType,
-  name: string
+  name: string,
+  guild_id: Guild['id']
 }
 
 interface Guild {
@@ -141,9 +142,9 @@ interface DMChannel {
 }
 
 enum ChannelType {
-  "GUILD_TEXT", "DM", "GUILD_VOICE", "GROUP_DM", "GUILD_CATEGORY", "GUILD_ANNOUNCEMENT",
-  "ANNOUNCEMENT_THREAD", "PUBLIC_THREAD", "PRIVATE_THREAD", "GUILD_STAGE_VOICE", "GUILD_DIRECTORY",
-  "GUILD_FORUM"
+  'GUILD_TEXT', 'DM', 'GUILD_VOICE', 'GROUP_DM', 'GUILD_CATEGORY', 'GUILD_ANNOUNCEMENT',
+  'ANNOUNCEMENT_THREAD', 'PUBLIC_THREAD', 'PRIVATE_THREAD', 'GUILD_STAGE_VOICE', 'GUILD_DIRECTORY',
+  'GUILD_FORUM'
 }
 
 interface Reaction {
@@ -157,7 +158,8 @@ export interface Emoji {
   roles?: Role[],
   name: string,
   id: number,
-  animated: boolean
+  animated: boolean,
+  quality: 'lossless'
 }
 
 export interface Attachment {
