@@ -27,7 +27,6 @@ export function initUserPopups() { // @ts-ignore
       interactive: true, allowHTML: true, onShow: function (instance) {
         userProfile(el.getAttribute('data-user-popup') || '')
           .then(user => {
-            console.log(user);
             let html = '';
             html += `<div class="${css({
               backgroundColor: `#${parseInt(user.user_profile?.accent_color?.toString(), 16)}`
@@ -65,7 +64,6 @@ export function initEmojisPopups() { // @ts-ignore
       interactive: true, allowHTML: true, onShow: function (instance) { // @ts-ignore
         emojiGuild(emoji.id)
           .then(guild => {
-            console.log(guild);
             let html = `<div class="${css({
               padding: '3px'
             })}">`;
