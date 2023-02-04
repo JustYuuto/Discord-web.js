@@ -27,15 +27,20 @@ export default class ChannelMessages extends HTMLElement {
             [`.${messageActionsCss}`]: { position: 'absolute', right: '20px', top: '-13px', display: 'flex' }
           },
         }, mentionned && { backgroundColor: '#4b443b' }])}">`;
+        html += `<div data-user-popup="${message.author.id}">`;
         html += avatarImgHTML(
-          avatarURL(message.author.id, message.author.avatar, message.author.discriminator, 48), 48, { marginRight: '8px' }
+          avatarURL(message.author.id, message.author.avatar, message.author.discriminator, 48), 48,
+          { marginRight: '8px', cursor: 'pointer' }
         );
+        html += `</div>`;
         html += `<div>`;
         html += `<div class="${css({
           marginBottom: '5px', display: 'flex', alignItems: 'center',
           '*': { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }
         })}">`;
-        html += `<span>${message.author.username}</span>&nbsp;`;
+        html += `<span data-user-popup="${message.author.id}" class="${css({
+          cursor: 'pointer', ':hover': { textDecoration: 'underline' }
+        })}">${message.author.username}</span>&nbsp;`;
         html += `<span class="${css({ fontSize: '.75rem', color: '#92969a', userSelect: 'none' })}" title="${moment(message.timestamp).format('LLLL')}">`;
         html += moment(message.timestamp).format('L LT');
         html += `</span>`;
