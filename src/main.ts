@@ -20,7 +20,7 @@ import MessageAttachment from './components/Message/Attachment';
 import MessageEmbed from './components/Message/Embed';
 import moment from 'moment';
 import ChannelLink from './components/Interactive/ChannelLink';
-import { initTitlePopups } from './helpers/popups';
+import { initPopups } from './helpers/popups';
 
 customElements.define('channels-list', ChannelsList);
 customElements.define('dms-list', DMsList);
@@ -149,7 +149,7 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
   }
 
   setTimeout(() => {
-    initTitlePopups();
+    initPopups();
   }, 1000);
 })();
 
