@@ -10,9 +10,11 @@ export default class ChannelMessages extends HTMLElement {
     channelMessages(urlParts()[2]).then(messages => {
       let html = `<div class="${css({ height: '100vh', overflow: 'hidden scroll' })}">`;
       messages.forEach(message => {
+        const messageLink = `${window.location.protocol}//${window.location.hostname}${(window.location.port !== '80' && window.location.port !== '443') ? `:${window.location.port}` : ''}/channels/${urlParts()[1]}/${message.channel_id}/${message.id}`;
         const messageActions = [
           { icon: 'reply', text: 'Reply' },
-          { icon: 'id', text: 'Copy ID', onClick: `copyText("${message.id}")` }
+          { icon: 'id', text: 'Copy ID', onClick: `copyText("${message.id}")` },
+          // { icon: 'link', text: 'Copy Message Link', onClick: `copyText("${messageLink}")` }
         ]; // @ts-ignore
         const mentionned = (message.mention_everyone || typeof message.mentions.find(u => u.id === JSON.parse(localStorage.getItem('user')).id) !== 'undefined');
         const messageActionsCss = css({
@@ -26,7 +28,7 @@ export default class ChannelMessages extends HTMLElement {
             backgroundColor: mentionned ? 'rgba(75,68,59,0.7)' : '#32353b',
             [`.${messageActionsCss}`]: { position: 'absolute', right: '20px', top: '-13px', display: 'flex' }
           },
-        }, mentionned && { backgroundColor: '#4b443b' }])}">`;
+        }, mentionned && { backgroundColor: '#4b443b' }])}" id="message__${message.id}">`;
         html += `<div data-user-popup="${message.author.id}">`;
         html += avatarImgHTML(
           avatarURL(message.author.id, message.author.avatar, message.author.discriminator, 48), 48,

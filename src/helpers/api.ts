@@ -126,7 +126,8 @@ interface Message {
   edited_timestamp: Date,
   reactions: Reaction[],
   attachments: Attachment[],
-  embeds: Embed[]
+  embeds: Embed[],
+  channel_id: string
 }
 
 export interface User {
