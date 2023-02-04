@@ -9,7 +9,7 @@ import { emojiURL } from '../helpers/image';
 export default class Markdown extends Component {
 
   connectedCallback() {
-    let text = this.getOptionalAttribute('text', undefined);
+    let text = this.getOptionalAttribute('text', '');
     if (!text) return;
     const isEmbed = this.getOptionalAttribute('embed', false) === 'true';
 
@@ -74,7 +74,7 @@ export default class Markdown extends Component {
     this.classList.add(css({
       wordBreak: 'break-word', display: 'block'
     }));
-    this.innerHTML = text + this.innerHTML;
+    this.innerHTML = this.getOptionalAttribute('keep-existing-html', true) ? text + this.innerHTML : text;
   }
 
   regex(regex: string) {
