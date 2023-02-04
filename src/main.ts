@@ -74,75 +74,60 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
     navigateTo('/channels/@me');
   } else if (path === '/channels/@me') {
     root.innerHTML = `
-        <div class="${css({ display: 'flex' })}">
-            <div class="${css({
-      backgroundColor: '#202225',
-      overflow: 'hidden scroll',
-      height: '100vh',
-      width: '85px',
-      maxWidth: '85px',
-      minWidth: '85px'
-    })}">
-                <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
-                <guilds-list></guilds-list>
-                <guilds-list-button button="join-guild"></guilds-list-button>
-                <guilds-list-button button="discovery"></guilds-list-button>
-            </div>
-            <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
-                <div class="${css({ display: 'flex' })}">
-                    <dms-list></dms-list>
-                </div>
-            </div>
-        </div>
-        `;
+<div class="${css({ display: 'flex' })}">
+  <div class="${css({
+    backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px',
+    minWidth: '85px'
+  })}">
+    <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
+    <guilds-list></guilds-list>
+    <guilds-list-button button="join-guild"></guilds-list-button>
+    <guilds-list-button button="discovery"></guilds-list-button>
+  </div>
+  <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
+    <div class="${css({ display: 'flex' })}">
+      <dms-list></dms-list>
+    </div>
+  </div>
+</div>`;
   } else if (pathRegexps.dm.test(path) && typeof urlParts()[2] !== 'undefined') {
     root.innerHTML = `
-        <div class="${css({ display: 'flex' })}">
-            <div class="${css({
-      backgroundColor: '#202225',
-      overflow: 'hidden scroll',
-      height: '100vh',
-      width: '85px',
-      maxWidth: '85px',
-      minWidth: '85px'
-    })}">
-                <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
-                <guilds-list></guilds-list>
-                <guilds-list-button button="join-guild"></guilds-list-button>
-                <guilds-list-button button="discovery"></guilds-list-button>
-            </div>
-            <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
-                <div class="${css({ display: 'flex' })}">
-                    <dms-list></dms-list>
-                    <channel-messages></channel-messages>
-                </div>
-            </div>
-        </div>
-        `;
+<div class="${css({ display: 'flex' })}">
+  <div class="${css({
+    backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px',
+    minWidth: '85px'
+  })}">
+    <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
+    <guilds-list></guilds-list>
+    <guilds-list-button button="join-guild"></guilds-list-button>
+    <guilds-list-button button="discovery"></guilds-list-button>
+  </div>
+  <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
+    <div class="${css({ display: 'flex' })}">
+      <dms-list></dms-list>
+      <channel-messages></channel-messages>
+    </div>
+  </div>
+</div>`;
   } else if (pathRegexps.channel.test(path) && typeof urlParts()[2] !== 'undefined') {
     root.innerHTML = `
-        <div class="${css({ display: 'flex' })}">
-            <div class="${css({
-      backgroundColor: '#202225',
-      overflow: 'hidden scroll',
-      height: '100vh',
-      width: '85px',
-      maxWidth: '85px',
-      minWidth: '85px'
-    })}">
-                <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
-                <guilds-list></guilds-list>
-                <guilds-list-button button="join-guild"></guilds-list-button>
-                <guilds-list-button button="discovery"></guilds-list-button>
-            </div>
-            <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
-                <div class="${css({ display: 'flex' })}">
-                    <channels-list guild-id="${guildId}"></channels-list>
-                    <channel-messages></channel-messages>
-                </div>
-            </div>
-        </div>
-        `;
+<div class="${css({ display: 'flex' })}">
+  <div class="${css({
+    backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px',
+    minWidth: '85px'
+  })}">
+    <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
+    <guilds-list></guilds-list>
+    <guilds-list-button button="join-guild"></guilds-list-button>
+    <guilds-list-button button="discovery"></guilds-list-button>
+  </div>
+  <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
+    <div class="${css({ display: 'flex' })}">
+      <channels-list guild-id="${guildId}"></channels-list>
+      <channel-messages></channel-messages>
+    </div>
+  </div>
+</div>`;
   } else if (pathRegexps.guild.test(path)) {
     const firstChannel = (await guildChannels(guildId))?.find(ch => ch.type !== 4 && ch.type !== 2)?.id;
     navigateTo(`/channels/${guildId}/${firstChannel}`);
