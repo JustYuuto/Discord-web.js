@@ -24,6 +24,14 @@ a:hover {
   background-color: #18191c;
 }
 
+.tippy-box[data-theme~='discord__emoji'], .tippy-box[data-theme~='discord__emoji'] .tippy-content {
+  background-color: transparent;
+}
+
+.tippy-box[data-theme~='discord__emoji'] .tippy-content > div > div {
+  padding: 10px;
+}
+
 .tippy-box[data-theme~='discord'] > .tippy-svg-arrow {
   fill: #18191c;
 }
