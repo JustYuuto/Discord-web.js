@@ -36,3 +36,15 @@ export function guildIconURL(id: number | string, icon: string, animated: boolea
   params.append('size', (size || 48).toString());
   return `https://cdn.discordapp.com/icons/${id}/${icon}.${animated ? 'gif' : 'png'}?${params}`;
 }
+
+export function userBannerURL(id: number | string, banner: string, animated: boolean, size?: number) {
+  const params = new URLSearchParams();
+  params.append('size', (size || 480).toString());
+  return `https://cdn.discordapp.com/banners/${id}/${banner}.${animated ? 'gif' : 'png'}?${params}`;
+}
+
+export function userBannerHTML(url: string, width?: number, height?: number, customCss?: ComponentSelector | SerializedStyles | CSSObject | ArrayCSSInterpolation) {
+  return `<img src="${url}" draggable="false" alt="" class="${css({
+    width: width || '480px', height: height || '120px', minHeight: height || '120px'
+  }, customCss)}" />`;
+}
