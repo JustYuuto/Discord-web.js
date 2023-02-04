@@ -3,12 +3,13 @@ import { css } from '@emotion/css';
 import { urlParts } from '../../helpers/url';
 import moment from 'moment';
 import { avatarImgHTML, avatarURL } from '../../helpers/image';
+import { inputCss } from '../Message/Input';
 
 export default class ChannelMessages extends HTMLElement {
 
   connectedCallback() {
     channelMessages(urlParts()[2]).then(messages => {
-      let html = `<div class="${css({ height: '100vh', overflow: 'hidden scroll' })}">`;
+      let html = `<div class="${css({ height: '100%', overflow: 'hidden scroll' })}">`;
       messages.forEach(message => {
         // const messageLink = `${window.location.protocol}//${window.location.hostname}${(window.location.port !== '80' && window.location.port !== '443') ? `:${window.location.port}` : ''}/channels/${urlParts()[1]}/${message.channel_id}/${message.id}`;
         const messageActions = [
@@ -28,7 +29,7 @@ export default class ChannelMessages extends HTMLElement {
             backgroundColor: mentionned ? 'rgba(75,68,59,0.7)' : '#32353b',
             [`.${messageActionsCss}`]: { position: 'absolute', right: '20px', top: '-13px', display: 'flex' }
           },
-        }, mentionned && { backgroundColor: '#4b443b' }])}" id="message__${message.id}">`;
+        }, mentionned && { backgroundColor: '#4b443b' }])}">`;
         html += `<div data-user-popup="${message.author.id}">`;
         html += avatarImgHTML(
           avatarURL(message.author.id, message.author.avatar, message.author.discriminator, 48), 48,
@@ -84,11 +85,12 @@ export default class ChannelMessages extends HTMLElement {
         html += `</div>`;
         html += `</div>`;
       });
-      html += `</div>`;
-      this.classList.add(css({
-        width: '100%', height: '100%', backgroundColor: '#36393f', color: 'white', position: 'relative'
-      }));
+      html += `</div><message-input></message-input>`;
       this.innerHTML = html;
+      this.classList.add(css({
+        width: '100%', height: `calc(100vh - ${document.querySelector(`.${inputCss}`)?.scrollHeight}px)`,
+        backgroundColor: '#36393f', color: 'white', position: 'relative'
+      }));
     });
   }
 

@@ -22,6 +22,7 @@ import moment from 'moment';
 import ChannelLink from './components/Interactive/ChannelLink';
 import { initPopups } from './helpers/popups';
 import LoadingScreen from './components/LoadingScreen';
+import MessageInput from './components/Message/Input';
 
 customElements.define('loading-screen', LoadingScreen);
 customElements.define('channels-list', ChannelsList);
@@ -38,6 +39,7 @@ customElements.define('message-action', MessageAction);
 customElements.define('message-attachment', MessageAttachment);
 customElements.define('message-embed', MessageEmbed);
 customElements.define('channel-link', ChannelLink);
+customElements.define('message-input', MessageInput);
 
 const path = window.location.pathname;
 const root = document.querySelector<HTMLDivElement>('#app');

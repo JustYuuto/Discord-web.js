@@ -65,7 +65,7 @@ export async function guildRole(guildId: string | number, roleId: number | strin
   return (await req.json()).find((r: Role) => r.id === roleId);
 }
 
-export async function channel(id: string | number): Promise<Channel> {
+export async function channel(id: string | number): Promise<Channel|DMChannel> {
   const req = await fetch(`${apiBase}/channels/${id}`, {
     headers: { Authorization: token }
   });
@@ -100,8 +100,17 @@ export async function emojiGuild(id: string | number): Promise<Guild> {
   return req.json();
 }
 
+export async function sendMessage(content: string, channelId: string | number): Promise<Message> {
+  const req = await fetch(`${apiBase}/channels/${channelId}/messages`, {
+    headers: { Authorization: token, 'Content-Type': 'application/json' }, method: 'POST', body: JSON.stringify({
+      content
+    })
+  });
+  return req.json();
+}
+
 interface Channel {
-  id: number,
+  id: string,
   type: ChannelType,
   name: string,
   guild_id: Guild['id']
