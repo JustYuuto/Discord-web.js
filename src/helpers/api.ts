@@ -111,7 +111,8 @@ interface Guild {
   id: number,
   name: string,
   icon: string,
-  emojis: Emoji[]
+  emojis: Emoji[],
+  approximate_presence_count: number
 }
 
 interface Message {

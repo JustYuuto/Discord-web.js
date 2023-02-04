@@ -36,7 +36,7 @@ export function initUserPopups() { // @ts-ignore
             html += `<div class="${css({
               width: '340px'
             })}">`;
-            html += `<div style="background-image: url(${userBannerURL(user.user.id, user.user_profile.banner, user.user_profile.banner?.startsWith('a_'))}); background-color: ${user.user.banner_color}" class="${css({
+            html += `<div style="${user.user_profile.banner ? `background-image: url(${userBannerURL(user.user.id, user.user_profile.banner, user.user_profile.banner?.startsWith('a_'))});` : ''} background-color: ${user.user.banner_color}" class="${css({
               width: '340px', height: '90px'
             })}"></div>`;
             html += `</div>`;
