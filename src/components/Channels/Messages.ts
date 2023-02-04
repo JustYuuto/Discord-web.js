@@ -10,7 +10,7 @@ export default class ChannelMessages extends HTMLElement {
     channelMessages(urlParts()[2]).then(messages => {
       let html = `<div class="${css({ height: '100vh', overflow: 'hidden scroll' })}">`;
       messages.forEach(message => {
-        const messageLink = `${window.location.protocol}//${window.location.hostname}${(window.location.port !== '80' && window.location.port !== '443') ? `:${window.location.port}` : ''}/channels/${urlParts()[1]}/${message.channel_id}/${message.id}`;
+        // const messageLink = `${window.location.protocol}//${window.location.hostname}${(window.location.port !== '80' && window.location.port !== '443') ? `:${window.location.port}` : ''}/channels/${urlParts()[1]}/${message.channel_id}/${message.id}`;
         const messageActions = [
           { icon: 'reply', text: 'Reply' },
           { icon: 'id', text: 'Copy ID', onClick: `copyText("${message.id}")` },
