@@ -21,7 +21,9 @@ import MessageEmbed from './components/Message/Embed';
 import moment from 'moment';
 import ChannelLink from './components/Interactive/ChannelLink';
 import { initPopups } from './helpers/popups';
+import LoadingScreen from './components/LoadingScreen';
 
+customElements.define('loading-screen', LoadingScreen);
 customElements.define('channels-list', ChannelsList);
 customElements.define('dms-list', DMsList);
 customElements.define('guilds-list', GuildsList);
@@ -57,6 +59,8 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
 (async () => {
   const guildId = urlParts()[1];
 
+  root.innerHTML = `<loading-screen text="Loading..."></loading-screen>`;
+
   if (path === '/login') {
     const token = new URLSearchParams(window.location.search).get('token');
     if (token !== null) {
@@ -73,7 +77,7 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
   } else if (path === '/app') {
     navigateTo('/channels/@me');
   } else if (path === '/channels/@me') {
-    root.innerHTML = `
+    root.innerHTML += `
 <div class="${css({ display: 'flex' })}">
   <div class="${css({
     backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px',
@@ -91,7 +95,7 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
   </div>
 </div>`;
   } else if (pathRegexps.dm.test(path) && typeof urlParts()[2] !== 'undefined') {
-    root.innerHTML = `
+    root.innerHTML += `
 <div class="${css({ display: 'flex' })}">
   <div class="${css({
     backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px',
@@ -110,7 +114,7 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
   </div>
 </div>`;
   } else if (pathRegexps.channel.test(path) && typeof urlParts()[2] !== 'undefined') {
-    root.innerHTML = `
+    root.innerHTML += `
 <div class="${css({ display: 'flex' })}">
   <div class="${css({
     backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px',
@@ -135,7 +139,8 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
 
   setTimeout(() => {
     initPopups();
-  }, 1000);
+    document.querySelector('loading-screen')?.remove();
+  }, 2000);
 })();
 
 // @ts-ignore
