@@ -109,7 +109,7 @@ export async function sendMessage(content: string, channelId: string | number): 
   return req.json();
 }
 
-interface Channel {
+export interface Channel {
   id: string,
   type: ChannelType,
   name: string,
