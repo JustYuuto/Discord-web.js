@@ -16,6 +16,13 @@ export async function user(id: number | string): Promise<User> {
   return req.json();
 }
 
+export async function userProfile(id: number | string): Promise<UserProfile> {
+  const req = await fetch(`${apiBase}/users/${id}/profile`, {
+    headers: { Authorization: token }
+  });
+  return req.json();
+}
+
 export async function guilds(): Promise<Guild[]> {
   const req = await fetch(`${apiBase}/users/@me/guilds`, {
     headers: { Authorization: token }
@@ -86,6 +93,13 @@ export async function removeReaction(messageId: string | number, emoji: string):
   return;
 }
 
+export async function emojiGuild(id: string | number): Promise<Guild> {
+  const req = await fetch(`${apiBase}/emojis/${id}/guild`, {
+    headers: { Authorization: token }
+  });
+  return req.json();
+}
+
 interface Channel {
   id: number,
   type: ChannelType,
@@ -96,7 +110,8 @@ interface Channel {
 interface Guild {
   id: number,
   name: string,
-  icon: string
+  icon: string,
+  emojis: Emoji[]
 }
 
 interface Message {
@@ -157,7 +172,7 @@ export interface Emoji {
   user?: User,
   roles?: Role[],
   name: string,
-  id: number,
+  id: string,
   animated: boolean,
   quality: 'lossless'
 }
@@ -188,5 +203,13 @@ export interface Embed {
     proxy_icon_url?: string,
     name: string,
     url?: string
+  }
+}
+
+interface UserProfile {
+  user: User,
+  user_profile: {
+    accent_color: string,
+    banner: string | null
   }
 }
