@@ -33,8 +33,13 @@ export default class Markdown extends Component {
     text = isEmbed ?
       text.replaceAll(this.regex('link_with_text'), '<a href="$2" target="_blank">$1</a>') :
       text.replaceAll(this.regex('link'), '<a href="$1" target="_blank">$1</a>');
-    text = text.replaceAll(this.regex('custom_emoji'), (_match: any, $1: string, $2: string, $3: string) => {
-      return `<img src="${emojiURL($3, $1 === 'a', 44, 'lossless')}" alt=":${$2}:" title=":${$2}:" draggable="false" />`;
+    text = text.replaceAll(this.regex('custom_emoji'), (_match: any, $1: any, name: string, id: string) => {
+      const animated = $1 === 'a';
+      return `<img src="${emojiURL(id, animated, 44, 'lossless')}" class="${css({
+        cursor: 'pointer'
+      })}" alt=":${name}:" title=":${name}:" draggable="false" data-emoji-popup='${JSON.stringify({
+        id, animated, name
+      })}' />`;
     });
     text = text.replaceAll(this.regex('channel'), `<channel-link id="$2"></channel-link>`);
     text = text.replaceAll(this.regex('user_mention'), '<user-mention id="$3"></user-mention>');
