@@ -118,6 +118,20 @@ export async function markUnread(channelId: string | number, messageId: string):
   return req.json();
 }
 
+export async function pinMessage(channelId: string | number, messageId: string): Promise<Message> {
+  const req = await fetch(`${apiBase}/channels/${channelId}/pins/${messageId}`, {
+    headers: { Authorization: token }, method: 'PUT'
+  });
+  return req.json();
+}
+
+export async function unpinMessage(channelId: string | number, messageId: string): Promise<void> {
+  await fetch(`${apiBase}/channels/${channelId}/pins/${messageId}`, {
+    headers: { Authorization: token }, method: 'DELETE'
+  });
+  return;
+}
+
 export interface Channel {
   id: string,
   type: ChannelType,
@@ -145,7 +159,8 @@ interface Message {
   reactions: Reaction[],
   attachments: Attachment[],
   embeds: Embed[],
-  channel_id: string
+  channel_id: string,
+  pinned: boolean
 }
 
 export interface User {

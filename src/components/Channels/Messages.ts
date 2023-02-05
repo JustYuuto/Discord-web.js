@@ -1,4 +1,4 @@
-import { channelMessages, markUnread } from '../../helpers/api';
+import { channelMessages, markUnread, pinMessage, unpinMessage } from '../../helpers/api';
 import { css } from '@emotion/css';
 import { urlParts } from '../../helpers/url';
 import moment from 'moment';
@@ -15,12 +15,16 @@ export default class ChannelMessages extends HTMLElement {
         messageId: string, icon: string, text: string, onClick: () => void
       }[][] = [];
       messages.forEach(message => {
+        console.log(message);
         // const messageLink = `${window.location.protocol}//${window.location.hostname}${(window.location.port !== '80' && window.location.port !== '443') ? `:${window.location.port}` : ''}/channels/${urlParts()[1]}/${message.channel_id}/${message.id}`;
         const messageActions = [
           { messageId: message.id, icon: 'reply', text: 'Reply', onClick: () => {} },
+          message.pinned ?
+            { messageId: message.id, icon: 'pin', text: 'Unpin Message', onClick: () => unpinMessage(message.channel_id, message.id) } :
+            { messageId: message.id, icon: 'pin', text: 'Pin Message', onClick: () => pinMessage(message.channel_id, message.id) },
           { messageId: message.id, icon: 'unread', text: 'Mark Unread', onClick: () => markUnread(message.channel_id, message.id) },
+          // { messageId: message.id, icon: 'link', text: 'Copy Message Link', onClick: () => copyText(messageLink) }
           { messageId: message.id, icon: 'id', text: 'Copy ID', onClick: () => copyText(message.id) },
-          // { icon: 'link', text: 'Copy Message Link', onClick: `copyText("${messageLink}")` }
         ];
         msgActions.push(messageActions); // @ts-ignore
         const mentionned = (message.mention_everyone || typeof message.mentions.find(u => u.id === JSON.parse(localStorage.getItem('user')).id) !== 'undefined');
@@ -90,7 +94,7 @@ export default class ChannelMessages extends HTMLElement {
             padding: '5px', margin: 0, backgroundColor: '#36393f', height: '28px', width: '28px', display: 'flex',
             justifyContent: 'center', alignItems: 'center', cursor: 'pointer', ':hover': { backgroundColor: '#40444b' }
           });
-          html += `<div class="${actionCss}" aria-label="${action.text}" role="button">`;
+          html += `<div class="${actionCss}" title="${action.text}" aria-label="${action.text}" role="button">`;
           html += `<svg-icon icon="${action.icon}" width="24" height="24" class="${css({ margin: 0, padding: 0 })}"></svg-icon>`;
           html += `</div>`;
           return html;
