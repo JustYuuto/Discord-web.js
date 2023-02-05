@@ -14,7 +14,6 @@ import UserMention from './components/Interactive/Mentions/User';
 import RoleMention from './components/Interactive/Mentions/Role';
 import GuildsListButton from './components/Guilds/ListButton';
 import MessageReaction from './components/Message/Reaction';
-import { copyText } from './helpers/text';
 import MessageAttachment from './components/Message/Attachment';
 import MessageEmbed from './components/Message/Embed';
 import moment from 'moment';
@@ -22,6 +21,8 @@ import ChannelLink from './components/Interactive/ChannelLink';
 import { initPopups } from './helpers/popups';
 import LoadingScreen from './components/LoadingScreen';
 import MessageInput from './components/Message/Input';
+import UAParser from 'ua-parser-js';
+import ChannelMessage from './components/Channels/Message';
 
 customElements.define('loading-screen', LoadingScreen);
 customElements.define('channels-list', ChannelsList);
@@ -29,6 +30,7 @@ customElements.define('dms-list', DMsList);
 customElements.define('guilds-list', GuildsList);
 customElements.define('guilds-list-button', GuildsListButton);
 customElements.define('channel-messages', ChannelMessages);
+customElements.define('channel-message', ChannelMessage);
 customElements.define('svg-icon', Icon);
 customElements.define('markdown-text', Markdown);
 customElements.define('user-mention', UserMention);
@@ -140,11 +142,63 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
   setTimeout(() => {
     initPopups();
     document.querySelector('loading-screen')?.remove();
+    const socket = new WebSocket('wss://gateway.discord.gg/?v=10&encoding=json');
+    const ua = new UAParser(navigator.userAgent);
+    const payload = {
+      op: 2,
+      d: {
+        token: localStorage.getItem('token'),
+        // Bitfield for ALL permissions
+        intents: 3276799,
+        properties: {
+          os: ua.getOS().name?.toLowerCase(),
+          browser: ua.getBrowser().name?.toLowerCase(),
+          device: 'chrome'
+        }
+      }
+    }
+
+    socket.addEventListener('open', () => {
+      socket.send(JSON.stringify(payload));
+    });
+
+    socket.addEventListener('message', (event) => {
+      const payload = JSON.parse(event.data);
+      const { t, d, op } = payload;
+
+      switch (op) {
+        case 10:
+          const { heartbeat_interval } = d;
+          heartbeat(heartbeat_interval);
+          break;
+      }
+
+      switch (t) {
+        case 'MESSAGE_CREATE':
+          if (d.channel_id === urlParts()[2]) {
+            const message = document.createElement('channel-message');
+            message.setAttribute('message', JSON.stringify(d));
+            document.querySelector('channel-messages > div')?.insertBefore(message, document.querySelector('channel-messages channel-message:first-of-type'));
+          }
+          break;
+        case 'MESSAGE_UPDATE':
+          if (d.channel_id === urlParts()[2]) {
+            document.querySelector(`channel-message#message__${d.id}`)?.setAttribute('message', JSON.stringify(d));
+          }
+          break;
+        case 'MESSAGE_DELETE':
+          if (d.channel_id === urlParts()[2]) {
+            document.querySelector(`channel-message#message__${d.id}`)?.remove();
+          }
+          break;
+      }
+    });
+
+    function heartbeat(ms: number) {
+      return setInterval(() => socket.send(JSON.stringify({ op: 1, d: null })), ms);
+    }
   }, 2000);
 })();
-
-// @ts-ignore
-window.copyText = copyText;
 
 if ('serviceWorker' in navigator) {
   // navigator.serviceWorker.register('/sw.js');
