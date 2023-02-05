@@ -20,7 +20,7 @@ export default class MessageInput extends Component {
       if (ch.type === 0 || ch.type === 5) {
         this.querySelector('div[contenteditable]')?.setAttribute('aria-placeholder', `Message #${ch.name}`);
         this.querySelector('div[contenteditable]')?.setAttribute('placeholder', `Message #${ch.name}`);
-      } else if (ch.type === 1 && 'recipients' in ch) {
+      } else if (ch.type === 1 && 'recipients' in ch && ch.recipients.length === 1) {
         this.querySelector('div[contenteditable]')?.setAttribute('aria-placeholder', `Message @${ch.recipients[0].username}`);
         this.querySelector('div[contenteditable]')?.setAttribute('placeholder', `Message @${ch.recipients[0].username}`);
       } else {
