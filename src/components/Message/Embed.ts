@@ -14,9 +14,7 @@ export default class MessageEmbed extends Component {
       })}">`;
       html += `<img src="${embed.author?.proxy_icon_url}" class="${css({ width: '24px', height: '24px', borderRadius: '9999px' })}" alt />`;
       if (embed.author.url) {
-        html += `<a class="${css({
-          color: '#fff'
-        })}" href="${embed.author.url}" target="_blank">${embed.author.name}</a>`;
+        html += `<a class="${css({ color: '#fff' })}" href="${embed.author.url}" target="_blank">${embed.author.name}</a>`;
       } else {
         html += `<span>${embed.author.name}</span>`;
       }
@@ -47,8 +45,8 @@ export default class MessageEmbed extends Component {
     }
     html += '</div>';
     this.classList.add(css({
-      backgroundColor: '#2f3136', borderLeftColor: embed.color || '#202225', borderLeftStyle: 'solid', borderLeftWidth: '4px',
-      borderRadius: '4px'
+      backgroundColor: '#2f3136', borderLeftColor: '#' + embed.color || '#202225', borderLeftStyle: 'solid',
+      borderLeftWidth: '4px', borderRadius: '4px'
     }));
     this.innerHTML = html;
   }
