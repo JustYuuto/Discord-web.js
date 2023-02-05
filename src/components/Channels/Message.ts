@@ -103,6 +103,9 @@ export default class ChannelMessage extends Component {
       },
     }, mentionned && { backgroundColor: '#4b443b' }]));
     this.innerHTML = html;
+    messageActions.forEach(action => {
+      this.querySelector(`div[aria-label="${action.text}"]`)?.addEventListener('click', action.onClick);
+    });
     this.removeAttribute('message');
   }
 
