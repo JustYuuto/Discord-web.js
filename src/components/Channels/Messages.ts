@@ -1,27 +1,33 @@
-import { channelMessages } from '../../helpers/api';
+import { channelMessages, markUnread } from '../../helpers/api';
 import { css } from '@emotion/css';
 import { urlParts } from '../../helpers/url';
 import moment from 'moment';
 import { avatarImgHTML, avatarURL } from '../../helpers/image';
 import { inputCss } from '../Message/Input';
+import { copyText } from '../../helpers/text';
 
 export default class ChannelMessages extends HTMLElement {
 
   connectedCallback() {
     channelMessages(urlParts()[2]).then(messages => {
       let html = `<div class="${css({ height: '100%', overflow: 'hidden scroll' })}">`;
+      let msgActions: {
+        messageId: string, icon: string, text: string, onClick: () => void
+      }[][] = [];
       messages.forEach(message => {
         // const messageLink = `${window.location.protocol}//${window.location.hostname}${(window.location.port !== '80' && window.location.port !== '443') ? `:${window.location.port}` : ''}/channels/${urlParts()[1]}/${message.channel_id}/${message.id}`;
         const messageActions = [
-          { icon: 'reply', text: 'Reply' },
-          { icon: 'id', text: 'Copy ID', onClick: `copyText("${message.id}")` },
+          { messageId: message.id, icon: 'reply', text: 'Reply', onClick: () => {} },
+          { messageId: message.id, icon: 'unread', text: 'Mark Unread', onClick: () => markUnread(message.channel_id, message.id) },
+          { messageId: message.id, icon: 'id', text: 'Copy ID', onClick: () => copyText(message.id) },
           // { icon: 'link', text: 'Copy Message Link', onClick: `copyText("${messageLink}")` }
-        ]; // @ts-ignore
+        ];
+        msgActions.push(messageActions); // @ts-ignore
         const mentionned = (message.mention_everyone || typeof message.mentions.find(u => u.id === JSON.parse(localStorage.getItem('user')).id) !== 'undefined');
         const messageActionsCss = css({
           display: 'none', borderColor: '#2f3237', borderWidth: '1px', borderStyle: 'solid',
-          '> :first-of-type': { borderBottomLeftRadius: '0.25rem', borderTopLeftRadius: '0.25rem' },
-          '> :last-of-type': { borderBottomRightRadius: '0.25rem', borderTopRightRadius: '0.25rem' }
+          '> :first-of-type': { borderBottomLeftRadius: '.25rem', borderTopLeftRadius: '.25rem' },
+          '> :last-of-type': { borderBottomRightRadius: '.25rem', borderTopRightRadius: '.25rem' }
         });
         html += `<div class="${css([{
           display: 'flex', padding: '5px 15px', margin: '10px 0', position: 'relative',
@@ -29,7 +35,7 @@ export default class ChannelMessages extends HTMLElement {
             backgroundColor: mentionned ? 'rgba(75,68,59,0.7)' : '#32353b',
             [`.${messageActionsCss}`]: { position: 'absolute', right: '20px', top: '-13px', display: 'flex' }
           },
-        }, mentionned && { backgroundColor: '#4b443b' }])}">`;
+        }, mentionned && { backgroundColor: '#4b443b' }])}" id="message__${message.id}">`;
         html += `<div data-user-popup="${message.author.id}">`;
         html += avatarImgHTML(
           avatarURL(message.author.id, message.author.avatar, message.author.discriminator, 48), 48,
@@ -79,7 +85,15 @@ export default class ChannelMessages extends HTMLElement {
         html += `</div>`;
         html += `<div class="${messageActionsCss}">`;
         html += messageActions.map(action => {
-          return `<message-action icon="${action.icon}" text="${action.text}" on-click='${action.onClick?.toString()}'></message-action>`;
+          let html = '';
+          const actionCss = css({
+            padding: '5px', margin: 0, backgroundColor: '#36393f', height: '28px', width: '28px', display: 'flex',
+            justifyContent: 'center', alignItems: 'center', cursor: 'pointer', ':hover': { backgroundColor: '#40444b' }
+          });
+          html += `<div class="${actionCss}" aria-label="${action.text}" role="button">`;
+          html += `<svg-icon icon="${action.icon}" width="24" height="24" class="${css({ margin: 0, padding: 0 })}"></svg-icon>`;
+          html += `</div>`;
+          return html;
         }).join('');
         html += `</div>`;
         html += `</div>`;
@@ -87,6 +101,9 @@ export default class ChannelMessages extends HTMLElement {
       });
       html += `</div><message-input></message-input>`;
       this.innerHTML = html;
+      msgActions.forEach(actions => actions.forEach(action => {
+        document.querySelector(`div#message__${action.messageId} div[aria-label="${action.text}"]`)?.addEventListener('click', action.onClick);
+      }));
       this.classList.add(css({
         width: '100%', height: `calc(100vh - ${document.querySelector(`.${inputCss}`)?.scrollHeight}px)`,
         backgroundColor: '#36393f', color: 'white', position: 'relative'
