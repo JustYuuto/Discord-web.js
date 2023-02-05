@@ -35,7 +35,7 @@ export default class Markdown extends Component {
       text.replaceAll(this.regex('link'), '<a href="$1" target="_blank">$1</a>');
     text = text.replaceAll(this.regex('custom_emoji'), (_match: any, $1: any, name: string, id: string) => {
       const animated = $1 === 'a';
-      return `<img src="${emojiURL(id, animated, 44, 'lossless')}" class="${css({
+      return `<img src="${emojiURL(id, animated, 16, 'lossless')}" class="${css({
         cursor: 'pointer'
       })}" alt=":${name}:" title=":${name}:" draggable="false" data-emoji-popup='${JSON.stringify({
         id, animated, name
