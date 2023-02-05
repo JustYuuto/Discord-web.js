@@ -110,10 +110,10 @@ export async function sendMessage(content: string, channelId: string | number): 
 }
 
 export async function deleteMessage(channelId: string | number, messageId: string | number): Promise<void> {
-  const req = await fetch(`${apiBase}/channels/${channelId}/messages/${messageId}`, {
+  await fetch(`${apiBase}/channels/${channelId}/messages/${messageId}`, {
     headers: { Authorization: token }, method: 'DELETE'
   });
-  return req.json();
+  return;
 }
 
 export async function markUnread(channelId: string | number, messageId: string): Promise<Message> {
@@ -154,7 +154,7 @@ interface Guild {
   approximate_presence_count: number
 }
 
-interface Message {
+export interface Message {
   id: string,
   content: string,
   author: User,
