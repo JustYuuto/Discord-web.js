@@ -1,4 +1,4 @@
-import { channelMessages, markUnread, pinMessage, unpinMessage } from '../../helpers/api';
+import { channelMessages, deleteMessage, markUnread, pinMessage, unpinMessage } from '../../helpers/api';
 import { css } from '@emotion/css';
 import { urlParts } from '../../helpers/url';
 import moment from 'moment';
@@ -23,6 +23,7 @@ export default class ChannelMessages extends HTMLElement {
             { messageId: message.id, icon: 'pin', text: 'Unpin Message', onClick: () => unpinMessage(message.channel_id, message.id) } :
             { messageId: message.id, icon: 'pin', text: 'Pin Message', onClick: () => pinMessage(message.channel_id, message.id) },
           { messageId: message.id, icon: 'unread', text: 'Mark Unread', onClick: () => markUnread(message.channel_id, message.id) },
+          { messageId: message.id, icon: 'delete', text: 'Delete Message', onClick: () => deleteMessage(message.channel_id, message.id) },
           // { messageId: message.id, icon: 'link', text: 'Copy Message Link', onClick: () => copyText(messageLink) }
           { messageId: message.id, icon: 'id', text: 'Copy ID', onClick: () => copyText(message.id) },
         ];

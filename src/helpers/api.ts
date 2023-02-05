@@ -109,6 +109,13 @@ export async function sendMessage(content: string, channelId: string | number): 
   return req.json();
 }
 
+export async function deleteMessage(channelId: string | number, messageId: string | number): Promise<void> {
+  const req = await fetch(`${apiBase}/channels/${channelId}/messages/${messageId}`, {
+    headers: { Authorization: token }, method: 'DELETE'
+  });
+  return req.json();
+}
+
 export async function markUnread(channelId: string | number, messageId: string): Promise<Message> {
   const req = await fetch(`${apiBase}/channels/${channelId}/messages/${messageId}/ack`, {
     headers: { Authorization: token, 'Content-Type': 'application/json' }, method: 'POST', body: JSON.stringify({
