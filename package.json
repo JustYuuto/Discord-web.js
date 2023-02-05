@@ -14,10 +14,12 @@
     "highlight.js": "^11.7.0",
     "moment": "^2.29.4",
     "normalize.css": "^8.0.1",
-    "tippy.js": "^6.3.7"
+    "tippy.js": "^6.3.7",
+    "ua-parser-js": "^1.0.33"
   },
   "devDependencies": {
     "@types/moment": "^2.13.0",
+    "@types/ua-parser-js": "^0.7.36",
     "typescript": "^4.9.3",
     "vite": "^4.0.0"
   }
