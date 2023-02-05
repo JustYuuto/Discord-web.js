@@ -29,10 +29,9 @@ export default class Markdown extends Component {
     text = text.replaceAll(this.regex('bold'), '<strong>$1</strong>');
     text = text.replaceAll(this.regex('bold_underline_italic'), '<strong><u><em>$1</em></u></strong>');
     text = text.replaceAll(this.regex('italic'), '<em>$1</em>');
-    text = text.replaceAll(this.regex('blockquote'), '<blockquote>$1</blockquote>');
     text = isEmbed ?
       text.replaceAll(this.regex('link_with_text'), '<a href="$2" target="_blank">$1</a>') :
-      text.replaceAll(this.regex('link'), '<a href="$1" target="_blank">$1</a>');
+      text.replaceAll(this.regex('link'), '<a href="$2" target="_blank">$2</a>');
     text = text.replaceAll(this.regex('custom_emoji'), (_match: any, $1: any, name: string, id: string) => {
       const animated = $1 === 'a';
       return `<img src="${emojiURL(id, animated, 16, 'lossless')}" class="${css({
@@ -41,6 +40,7 @@ export default class Markdown extends Component {
         id, animated, name
       })}' />`;
     });
+    text = text.replaceAll(this.regex('blockquote'), '<blockquote>$1</blockquote>');
     text = text.replaceAll(this.regex('channel'), `<channel-link id="$2"></channel-link>`);
     text = text.replaceAll(this.regex('user_mention'), '<user-mention id="$3"></user-mention>');
     text = text.replaceAll(this.regex('role_mention'), `<role-mention id="$3">@deleted-role</role-mention>`);
@@ -100,9 +100,11 @@ export default class Markdown extends Component {
       case 'code':
         return new RegExp(/``?([^`*]+)``?/gi);
       case 'link':
-        return new RegExp(/(http(s?):\/\/(([a-zA-Z0-9\.\-]+)\.)?([a-zA-Z0-9\-]+)\.([a-zA-Z0-9]{2,5})(\/([^*<>]+))?)/gi);
+        return new RegExp(/(&lt;)?(http(s?):\/\/(([a-zA-Z0-9\.\-]+)\.)?([a-zA-Z0-9\-]+)\.([a-zA-Z0-9]{2,5})(\/([^*<>]+))?)(&gt;)?/gi);
       case 'link_with_text':
         return new RegExp(/\[([^*]+)\]\((https?:\/\/[a-zA-Z0-9\.\-]+\.?[a-zA-Z0-9\-]+\.[a-zA-Z0-9]{2,5}\/?[^*<>]+?)+\)/gi);
+      case 'link_no_embed':
+        return new RegExp(/&lt;(http(s?):\/\/(([a-zA-Z0-9\.\-]+)\.)?([a-zA-Z0-9\-]+)\.([a-zA-Z0-9]{2,5})(\/([^*<>]+))?)&gt;/gi);
       case 'blockquote':
         return new RegExp(/\n?&gt; ([^*]+)/gi);
       case 'channel':
