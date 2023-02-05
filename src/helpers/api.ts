@@ -109,6 +109,15 @@ export async function sendMessage(content: string, channelId: string | number): 
   return req.json();
 }
 
+export async function markUnread(channelId: string | number, messageId: string): Promise<Message> {
+  const req = await fetch(`${apiBase}/channels/${channelId}/messages/${messageId}/ack`, {
+    headers: { Authorization: token, 'Content-Type': 'application/json' }, method: 'POST', body: JSON.stringify({
+      token: null
+    })
+  });
+  return req.json();
+}
+
 export interface Channel {
   id: string,
   type: ChannelType,
@@ -125,7 +134,7 @@ interface Guild {
 }
 
 interface Message {
-  id: number,
+  id: string,
   content: string,
   author: User,
   timestamp: Date,
