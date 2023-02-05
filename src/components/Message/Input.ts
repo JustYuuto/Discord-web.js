@@ -16,17 +16,21 @@ export default class MessageInput extends Component {
       '&:empty::before': { content: 'attr(placeholder)', color: '#606062' }, cursor: 'text'
     })}" contenteditable="true" role="textbox" aria-disabled="false"></div>`;
     html += `</div>`;
-    channel(urlParts()[2]).then(c => {
-      if ('recipients' in c && c.type === 1) {
-        this.querySelector('div[contenteditable]')?.setAttribute('aria-placeholder', `Message @${c.recipients[0].username}`);
+    channel(urlParts()[2]).then(ch => {
+      if (ch.type === 0 || ch.type === 5) {
+        this.querySelector('div[contenteditable]')?.setAttribute('aria-placeholder', `Message #${ch.name}`);
+        this.querySelector('div[contenteditable]')?.setAttribute('placeholder', `Message #${ch.name}`);
+      } else if (ch.type === 1 && 'recipients' in ch) {
+        this.querySelector('div[contenteditable]')?.setAttribute('aria-placeholder', `Message @${ch.recipients[0].username}`);
+        this.querySelector('div[contenteditable]')?.setAttribute('placeholder', `Message @${ch.recipients[0].username}`);
       } else {
-        this.querySelector('div[contenteditable]')?.setAttribute('aria-placeholder', `Message ${c.name}`);
-        this.querySelector('div[contenteditable]')?.setAttribute('placeholder', `Message ${c.name}`);
+        this.querySelector('div[contenteditable]')?.setAttribute('aria-placeholder', `Message ${ch.name}`);
+        this.querySelector('div[contenteditable]')?.setAttribute('placeholder', `Message ${ch.name}`);
       } // @ts-ignore
       this.querySelector('div[contenteditable]')?.addEventListener('keydown', (e: KeyboardEvent) => {
         if (e.key === 'Enter') {
           e.preventDefault(); // @ts-ignore
-          sendMessage(e.target.innerHTML, c.id); // @ts-ignore
+          sendMessage(e.target.innerHTML, ch.id); // @ts-ignore
           e.target.innerHTML = '';
         }
       });
