@@ -7,14 +7,16 @@ export default class MessageAttachment extends Component {
   connectedCallback() { // @ts-ignore
     const attachment: Attachment = JSON.parse(this.getAttribute('attachment'));
     let html = '';
+    const width = Math.floor(attachment.width >= 900 ? attachment.width / 3 : attachment.width / 2);
+    const height = Math.floor(attachment.height >= 900 ? attachment.height / 3 : attachment.height / 2);
     if (attachment.content_type.startsWith('image/')) {
       html += `<img src="${attachment.url}" alt="${attachment.filename}" class="${css({
         borderRadius: '.20rem', cursor: 'pointer'
-      })}" height="${attachment.height >= 900 ? attachment.height / 3 : attachment.height / 2}" />`;
+      })}" height="${height}" />`;
     } else if (attachment.content_type.startsWith('video/')) {
-      html += `<video controls preload="metadata" poster="${attachment.proxy_url}?format=jpeg&width=${attachment.width >= 900 ? attachment.width / 3 : attachment.width / 2}&height=${attachment.height >= 900 ? attachment.height / 3 : attachment.height / 2}" class="${css({
+      html += `<video controls preload="metadata" poster="${attachment.proxy_url}?format=jpeg&width=${width}&height=${Math.floor(height)}" class="${css({
         borderRadius: '.20rem'
-      })}" height="${attachment.height >= 900 ? attachment.height / 3 : attachment.height / 2}">`;
+      })}" height="${height}">`;
       html += `<source src="${attachment.url}" type="${attachment.content_type}" sizes="${attachment.width}x${attachment.height}" />`;
       html += `</video>`;
     } else {
