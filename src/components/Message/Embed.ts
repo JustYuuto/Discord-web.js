@@ -33,9 +33,10 @@ export default class MessageEmbed extends Component {
       html += `<div class="${css({
         display: 'flex', alignItems: 'center', padding: '0 12px 12px 12px', fontSize: '.75rem'
       })}">`;
-      if (embed.footer) {
+      if (embed.footer && embed.footer.text) {
         html += `<div class="${css({ display: 'flex', alignItems: 'center', gap: '7px' })}">`;
-        html += `<img src="${embed.footer?.icon_url}" class="${css({ width: '20px', height: '20px', borderRadius: '9999px' })}" alt />`;
+        if (embed.footer.icon_url)
+          html += `<img src="${embed.footer?.icon_url}" class="${css({ width: '20px', height: '20px', borderRadius: '9999px' })}" alt />`;
         html += `<span>${embed.footer?.text}</span>`;
         html += '</div>';
       }
