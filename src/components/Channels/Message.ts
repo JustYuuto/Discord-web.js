@@ -94,7 +94,7 @@ export default class ChannelMessage extends Component {
       html += message.embeds
         .filter(embed => embed.type === 'rich')
         .map(embed =>
-          `<message-embed embed='${JSON.stringify(embed).replaceAll('>', '&lt;').replaceAll('\'', '&#39;')}' class="${css({ display: 'flex', marginTop: '5px' })}"></message-embed>`)
+          `<message-embed embed='${JSON.stringify(embed).replaceAll('>', '&gt;').replaceAll('\'', '&#39;')}' class="${css({ display: 'flex', marginTop: '5px' })}"></message-embed>`)
         .join('');
     }
     if (message.attachments && message.attachments.length !== 0) {

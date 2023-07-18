@@ -239,6 +239,12 @@ export interface Attachment {
   size: number
 }
 
+interface EmbedField {
+  name: string,
+  value: any,
+  inline?: boolean
+}
+
 export interface Embed {
   title: string,
   description?: string,
@@ -255,7 +261,8 @@ export interface Embed {
     proxy_icon_url?: string,
     name: string,
     url?: string
-  }
+  },
+  fields: EmbedField[]
 }
 
 interface UserProfile {

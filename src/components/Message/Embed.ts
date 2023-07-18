@@ -29,6 +29,22 @@ export default class MessageEmbed extends Component {
     if (embed.description) html +=
       `<markdown-text text="${embed.description?.replaceAll('"', '&quot;')}" class="${css({ fontSize: '.875rem', fontWeight: 400, marginTop: '2px' })}" embed="true"></markdown-text>`;
     html += '</div>';
+    if (embed.fields) {
+      html += `<div class="${css({
+        padding: '0 12px 12px 12px'
+      })}">`;
+      embed.fields.forEach(embed => {
+        html += `<div class="${css({
+          display: 'flex', flexDirection: 'column', '&:not(:first-of-type)': {
+            paddingTop: '8px'
+          }
+        })}">`;
+        html += `<span class="${css({ fontWeight: 800 })}">${embed.name}</span>`;
+        html += `<markdown-text text="${embed.value}"></markdown-text>`;
+        html += `</div>`;
+      });
+      html += `</div>`;
+    }
     if (embed.footer || embed.timestamp) {
       html += `<div class="${css({
         display: 'flex', alignItems: 'center', padding: '0 12px 12px 12px', fontSize: '.75rem'
