@@ -6,6 +6,11 @@ export default class ChannelsList extends Component {
 
   connectedCallback() {
     const guildId = this.getAttribute('guild-id');
+    this.classList.add(css({
+      width: '282px', minWidth: '282px', height: '100vh', padding: '10px 10px 0', overflow: 'hidden scroll',
+      backgroundColor: '#2f3136'
+    }));
+    this.innerHTML = 'Loading channels';
     guildChannels(guildId).then(channels => {
       console.log(`Fetched ${channels.length} channels for guild ${guildId}`);
       const list: Channel[] = [];
@@ -47,10 +52,6 @@ export default class ChannelsList extends Component {
         }
         html += `</div>`;
       });
-      this.classList.add(css({
-        width: '282px', minWidth: '282px', height: '100vh', padding: '10px 10px 0', overflow: 'hidden scroll',
-        backgroundColor: '#2f3136'
-      }));
       this.innerHTML = html;
     });
   }
