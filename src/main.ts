@@ -24,6 +24,7 @@ import MessageInput from './components/Message/Input';
 import UAParser from 'ua-parser-js';
 import ChannelMessage from './components/Channels/Message';
 import MessageLabel from './components/Message/Label';
+import ChannelInfo from "./components/Channels/Info";
 
 customElements.define('loading-screen', LoadingScreen);
 customElements.define('channels-list', ChannelsList);
@@ -42,6 +43,7 @@ customElements.define('message-embed', MessageEmbed);
 customElements.define('channel-link', ChannelLink);
 customElements.define('message-input', MessageInput);
 customElements.define('user-tag', MessageLabel);
+customElements.define('channel-info', ChannelInfo);
 
 const path = window.location.pathname;
 const root = document.querySelector<HTMLDivElement>('#app');
@@ -62,6 +64,22 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
 
 (async () => {
   const guildId = urlParts()[1];
+  const template = (html: string): string => `
+<div class="${css({ display: 'flex' })}">
+  <div class="${css({
+    backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px',
+    minWidth: '85px'
+  })}">
+    <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
+    <guilds-list></guilds-list>
+    <guilds-list-button button="join-guild"></guilds-list-button>
+    <guilds-list-button button="discovery"></guilds-list-button>
+  </div>
+  <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
+    <channel-info></channel-info>
+    <div class="${css({ display: 'flex' })}">${html}</div>
+  </div>
+</div>`;
 
   root.innerHTML = `<loading-screen text="Loading..."></loading-screen>`;
 
@@ -81,61 +99,11 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
   } else if (path === '/app') {
     navigateTo('/channels/@me');
   } else if (path === '/channels/@me') {
-    root.innerHTML += `
-<div class="${css({ display: 'flex' })}">
-  <div class="${css({
-    backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px',
-    minWidth: '85px'
-  })}">
-    <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
-    <guilds-list></guilds-list>
-    <guilds-list-button button="join-guild"></guilds-list-button>
-    <guilds-list-button button="discovery"></guilds-list-button>
-  </div>
-  <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
-    <div class="${css({ display: 'flex' })}">
-      <dms-list></dms-list>
-    </div>
-  </div>
-</div>`;
+    root.innerHTML += template('<dms-list></dms-list>');
   } else if (pathRegexps.dm.test(path) && typeof urlParts()[2] !== 'undefined') {
-    root.innerHTML += `
-<div class="${css({ display: 'flex' })}">
-  <div class="${css({
-    backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px',
-    minWidth: '85px'
-  })}">
-    <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
-    <guilds-list></guilds-list>
-    <guilds-list-button button="join-guild"></guilds-list-button>
-    <guilds-list-button button="discovery"></guilds-list-button>
-  </div>
-  <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
-    <div class="${css({ display: 'flex' })}">
-      <dms-list></dms-list>
-      <channel-messages></channel-messages>
-    </div>
-  </div>
-</div>`;
+    root.innerHTML += template('<dms-list></dms-list><channel-messages></channel-messages>');
   } else if (pathRegexps.channel.test(path) && typeof urlParts()[2] !== 'undefined') {
-    root.innerHTML += `
-<div class="${css({ display: 'flex' })}">
-  <div class="${css({
-    backgroundColor: '#202225', overflow: 'hidden scroll', height: '100vh', width: '85px', maxWidth: '85px',
-    minWidth: '85px'
-  })}">
-    <div class="${css({ height: '3px', backgroundColor: '#373a3f', marginLeft: '7px', marginRight: '7px' })}"></div>
-    <guilds-list></guilds-list>
-    <guilds-list-button button="join-guild"></guilds-list-button>
-    <guilds-list-button button="discovery"></guilds-list-button>
-  </div>
-  <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
-    <div class="${css({ display: 'flex' })}">
-      <channels-list guild-id="${guildId}"></channels-list>
-      <channel-messages></channel-messages>
-    </div>
-  </div>
-</div>`;
+    root.innerHTML += template(`<channels-list guild-id="${guildId}"></channels-list><channel-messages></channel-messages>`);
   } else if (pathRegexps.guild.test(path)) {
     const firstChannel = (await guildChannels(guildId))?.find(ch => ch.type !== 4 && ch.type !== 2)?.id;
     navigateTo(`/channels/${guildId}/${firstChannel}`);

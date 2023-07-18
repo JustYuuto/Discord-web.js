@@ -33,13 +33,13 @@ export default class Markdown extends Component {
       text.replaceAll(this.regex('link'), '<a href="$2" target="_blank">$2</a>');
     text = text.replaceAll(this.regex('custom_emoji'), (_match: any, $1: any, name: string, id: string) => {
       const animated = $1 === 'a';
-      return `<img src="${emojiURL(id, animated, 16, 'lossless')}" class="${css({
-        cursor: 'pointer'
+      return `<img src="${emojiURL(id, animated, 20, 'lossless')}" class="${css({
+        cursor: 'pointer', position: 'relative', top: '2px'
       })}" alt=":${name}:" title=":${name}:" draggable="false" data-emoji-popup='${JSON.stringify({
         id, animated, name
       })}' />`;
     });
-    text = text.replaceAll(this.regex('blockquote'), '<blockquote>$1</blockquote>');
+    text = text.replaceAll(this.regex('blockquote'), '<blockquote>$2</blockquote>');
     text = text.replaceAll(this.regex('channel'), `<channel-link id="$2"></channel-link>`);
     text = text.replaceAll(this.regex('user_mention'), '<user-mention id="$3"></user-mention>');
     text = text.replaceAll(this.regex('role_mention'), `<role-mention id="$3">@deleted-role</role-mention>`);
@@ -105,7 +105,7 @@ export default class Markdown extends Component {
       case 'link_no_embed':
         return new RegExp(/&lt;(http(s?):\/\/(([a-zA-Z0-9\.\-]+)\.)?([a-zA-Z0-9\-]+)\.([a-zA-Z0-9]{2,5})(\/([^*<>]+))?)&gt;/gi);
       case 'blockquote':
-        return new RegExp(/\n&gt; ([^*]+)/gi);
+        return new RegExp(/\n([>|&gt;]+) ([^*]+)/gi);
       case 'channel':
         return new RegExp(/(<|&lt;)#([0-9]{18,19})(>|&gt;)/gi);
       case 'user_mention':
