@@ -1,4 +1,4 @@
-import { guildChannels } from '../../helpers/api';
+import { Channel, guildChannels } from '../../helpers/api';
 import { css } from '@emotion/css';
 import Component from '../Component';
 
@@ -7,8 +7,11 @@ export default class ChannelsList extends Component {
   connectedCallback() {
     const guildId = this.getAttribute('guild-id');
     guildChannels(guildId).then(channels => {
+      console.log(`Fetched ${channels.length} channels for guild ${guildId}`);
+      const list: Channel[] = [];
+      channels.forEach(c => list[c.position] = c);
       let html = '';
-      channels.forEach(channel => {
+      list.forEach(channel => {
         const channelLinkAndCatCss = css({ color: '#96989d', display: 'flex', textDecoration: 'none', cursor: 'pointer', overflow: 'hidden' });
         html += `<div class="${css({ marginTop: '6px', marginBottom: '6px' })}">`;
         if (channel.type !== 4) {

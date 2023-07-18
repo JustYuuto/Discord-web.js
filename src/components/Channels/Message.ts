@@ -14,6 +14,10 @@ export default class ChannelMessage extends Component {
     // const messageLink = `${window.location.protocol}//${window.location.hostname}${(window.location.port !== '80' && window.location.port !== '443') ? `:${window.location.port}` : ''}/channels/${urlParts()[1]}/${message.channel_id}/${message.id}`;
     const messageActions = [
       { messageId: message.id, icon: 'reply', text: 'Reply', onClick: () => {} },
+      { messageId: message.id, icon: 'pen', text: 'Edit', onClick: () => {
+        // @ts-ignore
+        this.querySelector('#msg-content').innerHTML = `<message-input><markdown-text text="${message.content.replaceAll('"', '&quot;')}"></markdown-text></message-input>`;
+      } },
       message.pinned ?
         { messageId: message.id, icon: 'pin', text: 'Unpin Message', onClick: () => unpinMessage(message.channel_id, message.id) } :
         { messageId: message.id, icon: 'pin', text: 'Pin Message', onClick: () => pinMessage(message.channel_id, message.id) },
@@ -52,7 +56,7 @@ export default class ChannelMessage extends Component {
     html += moment(message.timestamp).format('L LT');
     html += `</span>`;
     html += `</div>`;
-    html += `<div class="${css({ width: 'fit-content' })}">`;
+    html += `<div class="${css({ width: 'fit-content' })}" id="msg-content">`;
     html += `<span>`;
     html += `<markdown-text text="${message.content.replaceAll('"', '&quot;')}">`;
     if (message.edited_timestamp) html += `<span class="${css({

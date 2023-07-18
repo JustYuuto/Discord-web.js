@@ -14,7 +14,7 @@ export default class MessageInput extends Component {
     html += `<div class="${css({
       backgroundColor: '#40444b', padding: '10px 12px', width: '100%', borderRadius: '.25rem', display: 'block',
       '&:empty::before': { content: 'attr(placeholder)', color: '#606062' }
-    })}" contenteditable="true" role="textbox" aria-disabled="false" style="cursor: text"></div>`;
+    })}" contenteditable="true" role="textbox" aria-disabled="false" style="cursor: text">${this.innerHTML}</div>`;
     html += `</div>`;
     channel(urlParts()[2]).then(ch => {
       if (ch.type === 0 || ch.type === 5) {

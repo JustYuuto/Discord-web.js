@@ -143,7 +143,8 @@ export interface Channel {
   id: string,
   type: ChannelType,
   name: string,
-  guild_id: Guild['id']
+  guild_id: Guild['id'],
+  position: number
 }
 
 interface Guild {

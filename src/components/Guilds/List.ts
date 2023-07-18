@@ -19,7 +19,7 @@ export default class GuildsList extends HTMLElement {
           html += `<img src="${guildIconURL(guild.id, guild.icon, guild.icon.startsWith('a_'))}" alt="${guild.name}" class="${iconCss}" />`;
         } else {
           let iconText = '';
-          guild.name.split(' ').forEach(w => iconText += w[0]);
+          guild.name.split(/ +/g).forEach(w => iconText += w[0]);
           html += `<span class="${iconCss} ${css({
             color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#36393f',
             marginBottom: '6px', ':hover': { backgroundColor: '#5865f2' }

@@ -13,12 +13,15 @@ export default class ChannelMessages extends HTMLElement {
       backgroundColor: '#36393f', color: 'white', position: 'relative'
     }));
     channelMessages(urlParts()[2]).then(messages => {
+      messages = messages.reverse();
       console.log(`Fetched ${messages.length} messages for channel ${urlParts()[2]}`);
+      html += `<div class="${css({ height: '70vh' })}"></div>`;
       messages.forEach(message => {
         html += `<channel-message message="${JSON.stringify(message).replaceAll('"', '&quot;')}"></channel-message>`;
       });
       html += `</div><message-input></message-input>`;
       this.innerHTML = html;
+      this.querySelector('div')?.scroll(0, 999999);
     }).catch((e) => {
       this.innerHTML = `${html}${e}</div><message-input></message-input>`;
     });
