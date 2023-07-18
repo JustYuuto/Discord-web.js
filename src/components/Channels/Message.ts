@@ -44,9 +44,10 @@ export default class ChannelMessage extends Component {
       marginBottom: '5px', display: 'flex', alignItems: 'center',
       '*': { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }
     })}">`;
+    const showTag = message.author.bot || message.author.system;
     html += `<span data-user-popup="${message.author.id}" class="${css({
-      cursor: 'pointer', ':hover': { textDecoration: 'underline' }
-    })}">${message.author.username}</span>&nbsp;`;
+      cursor: 'pointer', ':hover': { textDecoration: 'underline' }, display: 'flex', gap: '6px'
+    })}">${message.author.display_name || message.author.username}${showTag ? `<user-tag tag="${message.author.system ? 'System' : 'Bot'}"></user-tag>` : ''}</span>&nbsp;`;
     html += `<span class="${css({ fontSize: '.75rem', color: '#92969a', userSelect: 'none' })}" title="${moment(message.timestamp).format('LLLL')}">`;
     html += moment(message.timestamp).format('L LT');
     html += `</span>`;
@@ -62,7 +63,7 @@ export default class ChannelMessage extends Component {
       html += message.embeds
         .filter(embed => embed.type === 'rich')
         .map(embed =>
-          `<message-embed embed='${JSON.stringify(embed)}' class="${css({ display: 'flex', marginTop: '5px' })}"></message-embed>`)
+          `<message-embed embed='${JSON.stringify(embed).replaceAll('>', '&lt;').replaceAll('\'', '&#39;')}' class="${css({ display: 'flex', marginTop: '5px' })}"></message-embed>`)
         .join('');
     }
     if (message.attachments && message.attachments.length !== 0) {

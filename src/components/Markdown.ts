@@ -106,7 +106,7 @@ export default class Markdown extends Component {
       case 'link_no_embed':
         return new RegExp(/&lt;(http(s?):\/\/(([a-zA-Z0-9\.\-]+)\.)?([a-zA-Z0-9\-]+)\.([a-zA-Z0-9]{2,5})(\/([^*<>]+))?)&gt;/gi);
       case 'blockquote':
-        return new RegExp(/\n?&gt; ([^*]+)/gi);
+        return new RegExp(/\n&gt; ([^*]+)/gi);
       case 'channel':
         return new RegExp(/(<|&lt;)#([0-9]{18,19})(>|&gt;)/gi);
       case 'user_mention':

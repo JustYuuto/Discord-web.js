@@ -174,9 +174,11 @@ export interface User {
   id: number,
   avatar: string,
   username: string,
+  display_name: string,
+  global_name: string,
   discriminator: number,
-  system?: boolean,
-  bot?: boolean,
+  system: boolean,
+  bot: boolean,
   locale:
     'id' | 'da' | 'de' | 'en-GB' | 'en-US' | 'es-ES' | 'fr' | 'hr' | 'it' | 'lt' | 'hu' | 'nl' | 'no' | 'pl' |
     'pt-BR' | 'ro' | 'fi' | 'sv-SE' | 'vi' | 'tr' | 'cs' | 'el' | 'bg' | 'ru' | 'uk' | 'hi' | 'th' | 'zh-CN' | 'ja' |

@@ -23,6 +23,7 @@ import LoadingScreen from './components/LoadingScreen';
 import MessageInput from './components/Message/Input';
 import UAParser from 'ua-parser-js';
 import ChannelMessage from './components/Channels/Message';
+import MessageLabel from './components/Message/Label';
 
 customElements.define('loading-screen', LoadingScreen);
 customElements.define('channels-list', ChannelsList);
@@ -40,6 +41,7 @@ customElements.define('message-attachment', MessageAttachment);
 customElements.define('message-embed', MessageEmbed);
 customElements.define('channel-link', ChannelLink);
 customElements.define('message-input', MessageInput);
+customElements.define('user-tag', MessageLabel);
 
 const path = window.location.pathname;
 const root = document.querySelector<HTMLDivElement>('#app');

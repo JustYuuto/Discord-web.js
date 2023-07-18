@@ -6,6 +6,7 @@ export default class GuildsList extends HTMLElement {
 
   connectedCallback() {
     guilds().then(guilds => {
+      console.log(`Fetched ${guilds.length} guilds`);
       let html = '';
       guilds.forEach(guild => {
         const iconCss = css({
