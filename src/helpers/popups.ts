@@ -41,9 +41,13 @@ export function initUserPopups() { // @ts-ignore
             html += `</div>`;
             html += `</div>`;
             html += `<div class="${css({ fontSize: '20px' })}">`;
-            html += `<span>${user.user.username}</span><span class="${css({
-              color: '#b9bbbe'
-            })}">#${user.user.discriminator}</span>`;
+            html += user.user.discriminator === '0' ?
+              `<span>${user.user.global_name || user.user.display_name}</span><br><span class="${css({
+                color: '#b9bbbe'
+              })}">${user.user.username}</span>` :
+              `<span>${user.user.username}</span><span class="${css({
+                color: '#b9bbbe'
+              })}">#${user.user.discriminator}</span>`;
             html += `</div>`;
             html += `</div>`;
             instance.setContent(html);
