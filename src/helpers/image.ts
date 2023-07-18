@@ -2,11 +2,11 @@ import { ArrayCSSInterpolation, ComponentSelector, css, CSSObject } from '@emoti
 import { SerializedStyles } from '@emotion/utils';
 import { Emoji } from './api';
 
-export function defaultAvatarURL(discriminator: number, size?: number) {
-  return `https://cdn.discordapp.com/embed/avatars/${discriminator % 5}.png${size ? `?size=${size}` : ''}`;
+export function defaultAvatarURL(discriminator: string, size?: number) {
+  return `https://cdn.discordapp.com/embed/avatars/${parseInt(discriminator) % 5}.png${size ? `?size=${size}` : ''}`;
 }
 
-export function avatarURL(id: number, avatar: string, discriminator: number, size?: number) {
+export function avatarURL(id: number, avatar: string, discriminator: string, size?: number) {
   return avatar ?
     `https://cdn.discordapp.com/avatars/${id}/${avatar}.png${size ? `?size=${size}` : ''}` :
     defaultAvatarURL(discriminator, size);
