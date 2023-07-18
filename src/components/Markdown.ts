@@ -1,4 +1,3 @@
-import { urlParts } from '../helpers/url';
 import { css } from '@emotion/css';
 import hljs from 'highlight.js/lib/common';
 import 'highlight.js/styles/atom-one-dark.css';
@@ -44,8 +43,8 @@ export default class Markdown extends Component {
     text = text.replaceAll(this.regex('channel'), `<channel-link id="$2"></channel-link>`);
     text = text.replaceAll(this.regex('user_mention'), '<user-mention id="$3"></user-mention>');
     text = text.replaceAll(this.regex('role_mention'), `<role-mention id="$3">@deleted-role</role-mention>`);
-    text = text.replaceAll('@everyone', `<role-mention id="${urlParts()[1]}"></role-mention>`);
-    text = text.replaceAll('@here', '<role-mention id="@here"></role-mention>');
+    text = text.replaceAll('@everyone', `<role-mention>@everyone</role-mention>`);
+    text = text.replaceAll('@here', '<role-mention>@here</role-mention>');
     text = text.replaceAll(this.regex('timestamp'), (_match: any, $1: string, $2: string) => {
       const timestamp = Number($1) * 1000;
       let html = (time: string) => `<span class="${css({
