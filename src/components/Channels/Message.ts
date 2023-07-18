@@ -11,7 +11,6 @@ export default class ChannelMessage extends Component {
     const message: Message = JSON.parse(this.getAttribute('message') || 'null');
     if (!message) return;
     let html = '';
-    // const messageLink = `${window.location.protocol}//${window.location.hostname}${(window.location.port !== '80' && window.location.port !== '443') ? `:${window.location.port}` : ''}/channels/${urlParts()[1]}/${message.channel_id}/${message.id}`;
     const messageActions = [
       { messageId: message.id, icon: 'reply', text: 'Reply', onClick: () => {} },
       { messageId: message.id, icon: 'pen', text: 'Edit', onClick: () => {
@@ -26,10 +25,8 @@ export default class ChannelMessage extends Component {
           window.speechSynthesis.speak(new SpeechSynthesisUtterance(message.content));
         } },
       { messageId: message.id, icon: 'delete', text: 'Delete Message', onClick: () => deleteMessage(message.channel_id, message.id) },
-      // { messageId: message.id, icon: 'link', text: 'Copy Message Link', onClick: () => copyText(messageLink) }
       { messageId: message.id, icon: 'id', text: 'Copy ID', onClick: () => copyText(message.id) },
     ];
-    // msgActions.push(messageActions);
     // @ts-ignore
     const mentionned = (message.mention_everyone || typeof message.mentions.find(u => u.id === JSON.parse(localStorage.getItem('user')).id) !== 'undefined');
     const messageActionsCss = css({
@@ -48,6 +45,17 @@ export default class ChannelMessage extends Component {
       html += `<strong>${message.interaction.user.display_name || message.interaction.user.username}</strong>&nbsp;`;
       html += `used&nbsp;<strong>/${message.interaction.name}</strong>&nbsp;`;
       html += `with&nbsp;<strong>${message.author.display_name || message.author.username}</strong>`;
+      html += `</div>`;
+    } else if (message.type === 19) {
+      html += `<div class="${css({
+        display: 'flex', left: '46px', position: 'relative', alignItems: 'center'
+      })}">`;
+      html += avatarImgHTML(
+        avatarURL(message.referenced_message.author.id, message.referenced_message.author.avatar, message.referenced_message.author.discriminator, 16), 16,
+        { marginRight: '8px', cursor: 'pointer' }
+      );
+      html += `<strong>${message.referenced_message.author.display_name || message.referenced_message.author.username}</strong>&nbsp;`;
+      html += `<markdown-text text="${message.referenced_message.content.replaceAll('"', '&quot;')}"></markdown-text>`;
       html += `</div>`;
     }
     html += `<div class="${css([{

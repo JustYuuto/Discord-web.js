@@ -173,7 +173,8 @@ export interface Message {
   interaction?: {
     name: string,
     user: User
-  }
+  },
+  referenced_message: Message
 }
 
 export interface User {
@@ -182,7 +183,7 @@ export interface User {
   username: string,
   display_name: string,
   global_name: string,
-  discriminator: number,
+  discriminator: string,
   system: boolean,
   bot: boolean,
   locale:
