@@ -168,7 +168,12 @@ export interface Message {
   attachments: Attachment[],
   embeds: Embed[],
   channel_id: string,
-  pinned: boolean
+  pinned: boolean,
+  type: number,
+  interaction?: {
+    name: string,
+    user: User
+  }
 }
 
 export interface User {

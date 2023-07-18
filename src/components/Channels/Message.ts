@@ -37,7 +37,26 @@ export default class ChannelMessage extends Component {
       '> :first-of-type': { borderBottomLeftRadius: '.25rem', borderTopLeftRadius: '.25rem' },
       '> :last-of-type': { borderBottomRightRadius: '.25rem', borderTopRightRadius: '.25rem' }
     });
-    html += `<div data-user-popup="${message.author.id}">`;
+    if (message.type === 20 && message.interaction) {
+      html += `<div class="${css({
+        display: 'flex', left: '46px', position: 'relative', alignItems: 'center'
+      })}">`;
+      html += avatarImgHTML(
+        avatarURL(message.interaction.user.id, message.interaction.user.avatar, message.interaction.user.discriminator, 16), 16,
+        { marginRight: '8px', cursor: 'pointer' }
+      );
+      html += `<strong>${message.interaction.user.display_name || message.interaction.user.username}</strong>&nbsp;`;
+      html += `used&nbsp;<strong>/${message.interaction.name}</strong>&nbsp;`;
+      html += `with&nbsp;<strong>${message.author.display_name || message.author.username}</strong>`;
+      html += `</div>`;
+    }
+    html += `<div class="${css([{
+      display: 'flex', padding: '5px 15px', position: 'relative',
+      ':hover': {
+        backgroundColor: mentionned ? 'rgba(75,68,59,0.7)' : '#32353b',
+        [`.${messageActionsCss}`]: { position: 'absolute', right: '20px', top: '-13px', display: 'flex' }
+      },
+    }, mentionned && { backgroundColor: '#4b443b' }])}"><div data-user-popup="${message.author.id}">`;
     html += avatarImgHTML(
       avatarURL(message.author.id, message.author.avatar, message.author.discriminator, 48), 48,
       { marginRight: '8px', cursor: 'pointer' }
@@ -97,16 +116,11 @@ export default class ChannelMessage extends Component {
       html += `</div>`;
       return html;
     }).join('');
-    html += `</div>`;
-    html += `</div>`;
+    html += `</div></div></div>`;
     this.setAttribute('id', `message__${message.id}`);
-    this.classList.add(css([{
-      display: 'flex', padding: '5px 15px', margin: '10px 0', position: 'relative',
-      ':hover': {
-        backgroundColor: mentionned ? 'rgba(75,68,59,0.7)' : '#32353b',
-        [`.${messageActionsCss}`]: { position: 'absolute', right: '20px', top: '-13px', display: 'flex' }
-      },
-    }, mentionned && { backgroundColor: '#4b443b' }]));
+    this.classList.add(css({
+      margin: '10px 0', display: 'block'
+    }));
     this.innerHTML = html;
     messageActions.forEach(action => {
       this.querySelector(`div[aria-label="${action.text}"]`)?.addEventListener('click', action.onClick);
