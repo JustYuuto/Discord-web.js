@@ -21,8 +21,8 @@ export default class MessageInput extends Component {
         this.querySelector('div[contenteditable]')?.setAttribute('aria-placeholder', `Message #${ch.name}`);
         this.querySelector('div[contenteditable]')?.setAttribute('placeholder', `Message #${ch.name}`);
       } else if (ch.type === 1 && 'recipients' in ch && ch.recipients.length === 1) {
-        this.querySelector('div[contenteditable]')?.setAttribute('aria-placeholder', `Message @${ch.recipients[0].username}`);
-        this.querySelector('div[contenteditable]')?.setAttribute('placeholder', `Message @${ch.recipients[0].username}`);
+        this.querySelector('div[contenteditable]')?.setAttribute('aria-placeholder', `Message @${ch.recipients[0].display_name || ch.recipients[0].username}`);
+        this.querySelector('div[contenteditable]')?.setAttribute('placeholder', `Message @${ch.recipients[0].display_name || ch.recipients[0].username}`);
       } else {
         this.querySelector('div[contenteditable]')?.setAttribute('aria-placeholder', `Message ${ch.name}`);
         this.querySelector('div[contenteditable]')?.setAttribute('placeholder', `Message ${ch.name}`);
