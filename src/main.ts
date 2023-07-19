@@ -24,7 +24,8 @@ import MessageInput from './components/Message/Input';
 import UAParser from 'ua-parser-js';
 import ChannelMessage from './components/Channels/Message';
 import MessageLabel from './components/Message/Label';
-import ChannelInfo from "./components/Channels/Info";
+import ChannelInfo from './components/Channels/Info';
+import AccountInfo from './components/Account/Info';
 
 customElements.define('loading-screen', LoadingScreen);
 customElements.define('channels-list', ChannelsList);
@@ -44,6 +45,7 @@ customElements.define('channel-link', ChannelLink);
 customElements.define('message-input', MessageInput);
 customElements.define('user-tag', MessageLabel);
 customElements.define('channel-info', ChannelInfo);
+customElements.define('account-info', AccountInfo);
 
 const path = window.location.pathname;
 const root = document.querySelector<HTMLDivElement>('#app');
@@ -99,11 +101,11 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
   } else if (path === '/app') {
     navigateTo('/channels/@me');
   } else if (path === '/channels/@me') {
-    root.innerHTML += template('<dms-list></dms-list>');
+    root.innerHTML += template('<div><dms-list></dms-list><account-info></account-info></div>');
   } else if (pathRegexps.dm.test(path) && typeof urlParts()[2] !== 'undefined') {
-    root.innerHTML += template('<dms-list></dms-list><channel-messages></channel-messages>');
+    root.innerHTML += template('<div><dms-list></dms-list><account-info></account-info></div><channel-messages></channel-messages>');
   } else if (pathRegexps.channel.test(path) && typeof urlParts()[2] !== 'undefined') {
-    root.innerHTML += template(`<channels-list guild-id="${guildId}"></channels-list><channel-messages></channel-messages>`);
+    root.innerHTML += template(`<div><channels-list guild-id="${guildId}"></channels-list><account-info></account-info></div><channel-messages></channel-messages>`);
   } else if (pathRegexps.guild.test(path)) {
     const firstChannel = (await guildChannels(guildId))?.find(ch => ch.type !== 4 && ch.type !== 2)?.id;
     navigateTo(`/channels/${guildId}/${firstChannel}`);
