@@ -7,8 +7,8 @@ export default class ChannelsList extends Component {
   connectedCallback() {
     const guildId = this.getAttribute('guild-id');
     this.classList.add(css({
-      width: '282px', minWidth: '282px', height: 'calc(100vh - 58px)', padding: '10px 10px 0', overflow: 'hidden scroll',
-      backgroundColor: '#2f3136'
+      width: '282px', minWidth: '282px', height: 'calc(100vh - 58px - 62.4px)', padding: '10px 10px 0', overflow: 'hidden scroll',
+      backgroundColor: '#2f3136', display: 'block'
     }));
     this.innerHTML = 'Loading channels';
     guildChannels(guildId).then(channels => {
