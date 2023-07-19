@@ -1,6 +1,6 @@
 import Component from '../Component';
 import { urlParts } from '../../helpers/url';
-import {channel, guild} from '../../helpers/api';
+import { Channel, channel, guild } from '../../helpers/api';
 import { css } from '@emotion/css';
 
 export default class ChannelInfo extends Component {
@@ -16,10 +16,13 @@ export default class ChannelInfo extends Component {
       })}">`;
       html += `<span>${guild.name}</span>`;
       html += `</div>`;
-      channel(urlParts()[2]).then(channel => {
-        console.log(channel);
+      // @ts-ignore
+      channel(urlParts()[2]).then((channel: Channel) => {
         html += `<div>`;
         html += `<span>${channel.name}</span>`;
+        if (channel.topic) {
+          html += `<span>${channel.topic}</span>`;
+        }
         html += `</div>`;
         this.innerHTML = html;
       });
