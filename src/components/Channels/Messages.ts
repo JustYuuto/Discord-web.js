@@ -18,6 +18,7 @@ export default class ChannelMessages extends HTMLElement {
         paddingLeft: '16px'
       })}">`;
       html += `<h1>Welcome to #${channel.name}</h1>`;
+      html += `<span>This is the start of the #${channel.name} channel.</span>`;
       html += `</div>`;
       channelMessages(urlParts()[2]).then(messages => {
         messages = messages.reverse();
