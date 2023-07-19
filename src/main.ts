@@ -111,9 +111,9 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
     navigateTo(`/channels/${guildId}/${firstChannel}`);
   }
 
-  setTimeout(() => {
-    initPopups();
-    document.querySelector('loading-screen')?.remove();
+  const ws = () => {
+    console.log('[Discord WS] Connecting...');
+    const now = Date.now();
     const socket = new WebSocket('wss://gateway.discord.gg/?v=10&encoding=json');
     const ua = new UAParser(navigator.userAgent);
     const payload = {
@@ -123,15 +123,24 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
         // Bitfield for ALL permissions
         intents: 3276799,
         properties: {
-          os: ua.getOS().name?.toLowerCase(),
-          browser: ua.getBrowser().name?.toLowerCase(),
-          device: 'chrome'
+          os: ua.getOS().name,
+          browser: ua.getBrowser().name,
+          device: 'Browser'
         }
       }
     }
 
+    let isSocketReady = false;
     socket.addEventListener('open', () => {
+      console.log('[Discord WS] Connected in', Date.now() - now + 'ms');
       socket.send(JSON.stringify(payload));
+      setTimeout(() => {
+        if (!isSocketReady) {
+          console.warn('[Discord WS] Ready event timeout after 60 seconds, re-trying to connect in 30 seconds');
+          socket.close(1000);
+          setTimeout(ws, 30_000);
+        }
+      }, 60_000);
     });
 
     socket.addEventListener('message', (event) => {
@@ -146,6 +155,10 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
       }
 
       switch (t) {
+        case 'READY':
+          isSocketReady = true;
+          console.log('[Discord WS] Ready');
+          break;
         case 'MESSAGE_CREATE':
           if (d.channel_id === urlParts()[2]) {
             const message = document.createElement('channel-message');
@@ -167,8 +180,17 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
     });
 
     function heartbeat(ms: number) {
-      return setInterval(() => socket.send(JSON.stringify({ op: 1, d: null })), ms);
+      return setInterval(() => {
+        if (socket.readyState === 2 || socket.readyState === 3) return;
+        socket.send(JSON.stringify({ op: 1, d: null }));
+      }, ms);
     }
+  }
+
+  setTimeout(() => {
+    initPopups();
+    document.querySelector('loading-screen')?.remove();
+    ws();
   }, 2000);
 })();
 
