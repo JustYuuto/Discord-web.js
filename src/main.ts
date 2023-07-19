@@ -77,7 +77,7 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
   </div>
   <div class="${css({ display: 'flex', flexDirection: 'column', width: '100%' })}">
     <channel-info></channel-info>
-    <div class="${css({ display: 'flex' })}">${html}</div>
+    <div class="${css({ display: 'flex', height: 'calc(100vh - 58px)' })}">${html}</div>
   </div>
 </div>`;
 

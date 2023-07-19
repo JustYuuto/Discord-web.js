@@ -9,7 +9,7 @@ export default class ChannelMessages extends HTMLElement {
     let html = `<div class="${css({ height: '100%', overflow: 'hidden scroll' })}">`;
     this.innerHTML = `${html}Loading...</div><message-input></message-input>`;
     this.classList.add(css({
-      width: '100%', height: `calc(100vh - ${document.querySelector(`.${inputCss}`)?.scrollHeight || 0}px)`,
+      width: '100%', height: `calc(100vh - ${document.querySelector(`.${inputCss}`)?.scrollHeight || 0}px - 58px)`,
       backgroundColor: '#36393f', color: 'white', position: 'relative'
     }));
     html += `<div class="${css({ height: '70vh' })}"></div>`;

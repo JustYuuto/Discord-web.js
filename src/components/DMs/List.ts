@@ -6,6 +6,10 @@ import { avatarImgHTML, avatarURL, groupAvatarURL } from '../../helpers/image';
 export default class DMsList extends Component {
 
   connectedCallback() {
+    this.classList.add(css({
+      width: '282px', minWidth: '282px', height: 'calc(100vh - 58px)', padding: '10px 10px 0', overflow: 'hidden scroll',
+      backgroundColor: '#2f3136'
+    }));
     dms().then(dms => {
       console.log(`Fetched ${dms.length} DMs`);
       let html = '';
@@ -43,10 +47,6 @@ export default class DMsList extends Component {
         html += `</a>`;
         html += `</div>`;
       });
-      this.classList.add(css({
-        width: '282px', minWidth: '282px', height: '100vh', padding: '10px 10px 0', overflow: 'hidden scroll',
-        backgroundColor: '#2f3136'
-      }));
       this.innerHTML = html;
     });
   }
