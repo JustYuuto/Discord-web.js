@@ -100,7 +100,7 @@ export async function emojiGuild(id: string | number): Promise<Guild> {
   return req.json();
 }
 
-export async function sendMessage(content: string, channelId: string | number): Promise<Message> {
+export async function sendMessage(content: string, channelId: string | number): Promise<Partial<Message>> {
   const req = await fetch(`${apiBase}/channels/${channelId}/messages`, {
     headers: { Authorization: token, 'Content-Type': 'application/json' }, method: 'POST', body: JSON.stringify({
       content
