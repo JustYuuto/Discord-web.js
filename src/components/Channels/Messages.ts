@@ -2,6 +2,7 @@ import { channel, channelMessages } from '../../helpers/api';
 import { css } from '@emotion/css';
 import { urlParts } from '../../helpers/url';
 import { inputCss } from '../Message/Input';
+import { cleanJSON } from '../../helpers/string';
 
 export default class ChannelMessages extends HTMLElement {
 
@@ -24,7 +25,7 @@ export default class ChannelMessages extends HTMLElement {
         messages = messages.reverse();
         console.log(`Fetched ${messages.length} messages for channel ${channel.id}`);
         messages.forEach(message => {
-          html += `<channel-message message="${JSON.stringify(message).replaceAll('"', '&quot;')}"></channel-message>`;
+          html += `<channel-message message="${cleanJSON(JSON.stringify(message))}"></channel-message>`;
         });
         html += `</div><message-input></message-input>`;
         this.innerHTML = html;

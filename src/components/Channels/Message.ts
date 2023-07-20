@@ -4,6 +4,7 @@ import moment from 'moment';
 import { avatarImgHTML, avatarURL } from '../../helpers/image';
 import { copyText } from '../../helpers/text';
 import Component from '../Component';
+import { cleanJSON } from '../../helpers/string';
 
 export default class ChannelMessage extends Component {
 
@@ -85,7 +86,7 @@ export default class ChannelMessage extends Component {
     html += `</div>`;
     html += `<div class="${css({ width: 'fit-content' })}" id="msg-content">`;
     html += `<span>`;
-    html += `<markdown-text text="${message.content.replaceAll('"', '&quot;')}">`;
+    html += `<markdown-text text="${cleanJSON(message.content)}">`;
     if (message.edited_timestamp) html += `<span class="${css({
       fontSize: '.75rem', color: '#888a8c', userSelect: 'none'
     })}" title="${moment(message.edited_timestamp).format('LLLL')}">&nbsp;(edited)</span>`;
