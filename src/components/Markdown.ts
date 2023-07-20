@@ -6,9 +6,12 @@ import moment from 'moment';
 import { emojiURL } from '../helpers/image';
 
 export function parseMarkdown(text: string, embed: boolean = false) {
-  text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-  text = text.replaceAll('\n', '<br />');
-  text = text.replaceAll('\\\\', '\\');
+  text = text
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('\n', '<br />')
+    .replaceAll('\\\\', '\\');
   text = text.replaceAll(
     getRegex('codeblock'),
     `<pre><code class="hljs $1 ${css({ whiteSpace: 'pre-wrap' })}">${hljs.highlightAuto('$2').value}</code></pre>`
