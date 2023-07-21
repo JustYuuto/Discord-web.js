@@ -30,7 +30,10 @@ export default class MessageInput extends Component {
       this.querySelector('div[contenteditable]')?.addEventListener('keydown', (e: KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault(); // @ts-ignore
-          sendMessage(e.target.innerHTML.trim().replaceAll('<br>', '\n'), ch.id); // @ts-ignore
+          sendMessage((<string>e.target.innerHTML)
+            .replaceAll('&nbsp;', ' ')
+            .replaceAll('<br>', '\n'), ch.id
+          ); // @ts-ignore
           e.target.innerHTML = '';
         }
       });

@@ -26,6 +26,7 @@ import ChannelMessage from './components/Channels/Message';
 import MessageLabel from './components/Message/Label';
 import ChannelInfo from './components/Channels/Info';
 import AccountInfo from './components/Account/Info';
+import { cleanJSON } from './helpers/string';
 
 customElements.define('loading-screen', LoadingScreen);
 customElements.define('channels-list', ChannelsList);
@@ -93,7 +94,7 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
           const user: User = await req.json();
           localStorage.setItem('token', token);
           localStorage.setItem('user', JSON.stringify(user));
-          localStorage.setItem('locale', user.locale);
+          localStorage.setItem('locale', user.locale || 'en-US');
           navigateTo('/app');
         }
       });

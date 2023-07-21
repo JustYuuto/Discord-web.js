@@ -10,12 +10,12 @@ export function parseMarkdown(text: string, embed: boolean = false) {
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
-    .replaceAll('\n', '<br />')
     .replaceAll('\\\\', '\\');
   text = text.replaceAll(
     getRegex('codeblock'),
     `<pre><code class="hljs $1 ${css({ whiteSpace: 'pre-wrap' })}">${hljs.highlightAuto('$2').value}</code></pre>`
   );
+  text = text.replaceAll('\n', '<br />');
   text = text.replaceAll(getRegex('code'), '<code>$1</code>');
   text = text.replaceAll(getRegex('underline'), '<u>$1</u>');
   text = text.replaceAll(getRegex('bold_italic'), '<strong><em>$1</em></strong>');
@@ -26,8 +26,8 @@ export function parseMarkdown(text: string, embed: boolean = false) {
   text = text.replaceAll(getRegex('bold_underline_italic'), '<strong><u><em>$1</em></u></strong>');
   text = text.replaceAll(getRegex('italic'), '<em>$1</em>');
   text = embed ?
-    text.replaceAll(getRegex('link_with_text'), '<a href="$2" target="_blank">$1</a>') :
-    text.replaceAll(getRegex('link'), '<a href="$2" target="_blank">$2</a>');
+    text.replaceAll(getRegex('link_with_text'), '<a href="$2" target="_blank" title="$1 ($2)">$1</a>') :
+    text.replaceAll(getRegex('link'), '<a href="$2" target="_blank" title="$2">$2</a>');
   text = text.replaceAll(getRegex('custom_emoji'), (_match: any, $1: any, name: string, id: string) => {
     const animated = $1 === 'a';
     return `<img src="${emojiURL(id, animated, 20, 'lossless')}" class="${css({
@@ -117,7 +117,7 @@ function getRegex(regex: string) {
 export default class Markdown extends Component {
 
   connectedCallback() {
-    let text = this.getAttribute('text');
+    let text = this.getAttribute('text') || '';
     text = parseMarkdown(text, this.getOptionalAttribute('is-embed', 'false') === 'true');
 
     this.classList.add(css({

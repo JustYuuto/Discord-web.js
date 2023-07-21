@@ -156,15 +156,17 @@ interface Guild {
   approximate_presence_count: number
 }
 
+declare type Timestamp = Date | number;
+
 export interface Message {
   id: string,
   content: string,
   author: User,
-  timestamp: Date,
+  timestamp: Timestamp,
   mention_everyone: boolean,
   mention_roles: Role['id'][],
   mentions: User[],
-  edited_timestamp: Date,
+  edited_timestamp: Timestamp | null,
   reactions: Reaction[],
   attachments: Attachment[],
   embeds: Embed[],
@@ -175,23 +177,24 @@ export interface Message {
     name: string,
     user: User
   },
-  referenced_message: Message
+  referenced_message?: Message,
+  components: ComponentRow[]
 }
 
 export interface User {
-  id: number,
-  avatar: string,
+  id: string,
+  avatar: string | null,
   username: string,
-  display_name: string,
-  global_name: string,
+  display_name: string | null,
+  global_name: string | null,
   discriminator: string,
-  system: boolean,
+  system?: boolean,
   bot: boolean,
-  locale:
+  locale?:
     'id' | 'da' | 'de' | 'en-GB' | 'en-US' | 'es-ES' | 'fr' | 'hr' | 'it' | 'lt' | 'hu' | 'nl' | 'no' | 'pl' |
     'pt-BR' | 'ro' | 'fi' | 'sv-SE' | 'vi' | 'tr' | 'cs' | 'el' | 'bg' | 'ru' | 'uk' | 'hi' | 'th' | 'zh-CN' | 'ja' |
     'zh-TW' | 'ko',
-  banner_color: string
+  banner_color: string | null
 }
 
 export interface Role {
@@ -272,4 +275,32 @@ interface UserProfile {
     accent_color: string,
     banner: string | null
   }
+}
+
+export interface ComponentRow {
+  type: ComponentRowType,
+  components: Component[]
+}
+
+export type Component = ComponentButton;
+
+export interface ComponentButton {
+  type: ComponentType,
+  custom_id: string,
+  style: ComponentButtonStyle,
+  label?: string,
+  disabled?: boolean,
+  emoji?: Emoji
+}
+
+export enum ComponentButtonStyle {
+  '_', 'PRIMARY', 'SECONDARY'
+}
+
+export enum ComponentType {
+  '', '', 'BUTTON'
+}
+
+declare enum ComponentRowType {
+  '_', 'BUTTON'
 }

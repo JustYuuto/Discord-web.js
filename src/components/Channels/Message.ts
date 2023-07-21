@@ -1,4 +1,4 @@
-import { deleteMessage, markUnread, Message, pinMessage, unpinMessage } from '../../helpers/api';
+import { ComponentButtonStyle, deleteMessage, markUnread, Message, pinMessage, unpinMessage } from '../../helpers/api';
 import { css } from '@emotion/css';
 import moment from 'moment';
 import { avatarImgHTML, avatarURL } from '../../helpers/image';
@@ -47,7 +47,7 @@ export default class ChannelMessage extends Component {
       html += `used&nbsp;<strong>/${message.interaction.name}</strong>&nbsp;`;
       html += `with&nbsp;<strong>${message.author.display_name || message.author.username}</strong>`;
       html += `</div>`;
-    } else if (message.type === 19) {
+    } else if (message.type === 19 && message.referenced_message) {
       html += `<div class="${css({
         display: 'flex', left: '46px', position: 'relative', alignItems: 'center'
       })}">`;
@@ -111,6 +111,25 @@ export default class ChannelMessage extends Component {
           `<message-reaction me="${reaction.me}" count="${reaction.count}" emoji='${JSON.stringify(reaction.emoji)}' message-id="${message.id}"></message-reaction>`)
         .join('');
       html += `</div>`;
+    }
+    if (message.components && message.components.length !== 0) {
+      message.components.forEach(row => {
+        html += `<div class="${css({
+          display: 'flex', gap: '10px', marginTop: '5px'
+        })}">`;
+        row.components.forEach(component => {
+          let color;
+          if (component.style === ComponentButtonStyle.PRIMARY) color = '#5865F2';
+          html += `<div class="${css({
+            padding: '10px', cursor: component.disabled ? 'not-allowed' : 'pointer', backgroundColor: color
+          })}">`;
+          if (component.emoji) html += `<span>${component.emoji.name}</span>`;
+          if (component.emoji && component.label) html += `&nbsp;&nbsp;`;
+          if (component.label) html += `<span>${component.label}</span>`;
+          html += `</div>`;
+        });
+        html += `</div>`;
+      });
     }
     html += `</div>`;
     html += `<div class="${messageActionsCss}">`;

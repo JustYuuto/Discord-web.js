@@ -6,7 +6,7 @@ export function defaultAvatarURL(discriminator: string, size?: number) {
   return `https://cdn.discordapp.com/embed/avatars/${parseInt(discriminator) % 5}.png${size ? `?size=${size}` : ''}`;
 }
 
-export function avatarURL(id: number, avatar: string, discriminator: string, size?: number) {
+export function avatarURL(id: string, avatar: string | null, discriminator: string, size?: number) {
   return avatar ?
     `https://cdn.discordapp.com/avatars/${id}/${avatar}.${avatar.startsWith('a_') ? 'gif' : 'png'}${size ? `?size=${size}` : ''}` :
     defaultAvatarURL(discriminator, size);

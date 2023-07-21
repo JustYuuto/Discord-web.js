@@ -1,4 +1,4 @@
-import { channel, channelMessages } from '../../helpers/api';
+import { channel, channelMessages, Message } from '../../helpers/api';
 import { css } from '@emotion/css';
 import { urlParts } from '../../helpers/url';
 import { inputCss } from '../Message/Input';
@@ -21,8 +21,8 @@ export default class ChannelMessages extends HTMLElement {
       html += `<h1>Welcome to #${channel.name}</h1>`;
       html += `<span>This is the start of the #${channel.name} channel.</span>`;
       html += `</div>`;
-      channelMessages(urlParts()[2]).then(messages => {
-        messages = messages.reverse();
+      channelMessages(channel.id).then(messages => {
+        messages = (messages.length ? messages : []).reverse();
         console.log(`Fetched ${messages.length} messages for channel ${channel.id}`);
         messages.forEach(message => {
           html += `<channel-message message="${cleanJSON(JSON.stringify(message))}"></channel-message>`;
@@ -31,7 +31,35 @@ export default class ChannelMessages extends HTMLElement {
         this.innerHTML = html;
         this.querySelector('div')?.scroll(0, 999999);
       }).catch((e) => {
-        this.innerHTML = `${html}${e}</div><message-input></message-input>`;
+        console.error(e);
+        const message: Message = {
+          attachments: [],
+          channel_id: channel.id,
+          components: [],
+          edited_timestamp: null,
+          embeds: [],
+          id: '0',
+          mention_roles: [],
+          pinned: false,
+          reactions: [],
+          type: 0,
+          author: {
+            global_name: 'Clyde',
+            display_name: 'Clyde',
+            id: '0',
+            username: 'clyde',
+            discriminator: '0',
+            bot: true,
+            avatar: null,
+            banner_color: null
+          },
+          content: `Messages failed to fetch! Here's the error:\n\`\`\`\n${e}\n\`\`\``,
+          timestamp: Date.now(),
+          mentions: [],
+          mention_everyone: false
+        };
+        this.innerHTML = `${html}<channel-message message="${cleanJSON(JSON.stringify(message))}"></channel-message></div><message-input></message-input>`;
+        this.querySelector('div')?.scroll(0, 999999);
       });
     });
   }
