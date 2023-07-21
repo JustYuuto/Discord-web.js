@@ -16,7 +16,7 @@ export default class ChannelMessages extends HTMLElement {
     html += `<div class="${css({ height: '70vh' })}"></div>`;
     channel(urlParts()[2]).then((channel) => {
       html += `<div class="${css({
-        paddingLeft: '16px'
+        paddingLeft: '16px', userSelect: 'none'
       })}">`;
       html += `<h1>Welcome to #${channel.name}</h1>`;
       html += `<span>This is the start of the #${channel.name} channel.</span>`;
