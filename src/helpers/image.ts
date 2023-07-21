@@ -20,7 +20,7 @@ export function groupAvatarURL(id: number, icon: string, size?: number) {
 
 export function avatarImgHTML(url: string, sizes?: number, customCss?: ComponentSelector | SerializedStyles | CSSObject | ArrayCSSInterpolation) {
   return `<img src="${url}" draggable="false" alt="" class="${css({
-    borderRadius: '9999px', width: sizes || '48px', height: sizes || '48px'
+    borderRadius: '9999px', width: sizes || '48px', height: sizes || '48px', userSelect: 'none'
   }, customCss)}" />`;
 }
 
@@ -45,6 +45,6 @@ export function userBannerURL(id: number | string, banner: string, animated: boo
 
 export function userBannerHTML(url: string, width?: number, height?: number, customCss?: ComponentSelector | SerializedStyles | CSSObject | ArrayCSSInterpolation) {
   return `<img src="${url}" draggable="false" alt="" class="${css({
-    width: width || '480px', height: height || '120px', minHeight: height || '120px'
+    width: width || '480px', height: height || '120px', minHeight: height || '120px', userSelect: 'none'
   }, customCss)}" />`;
 }
