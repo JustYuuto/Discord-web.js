@@ -26,7 +26,6 @@ import ChannelMessage from './components/Channels/Message';
 import MessageLabel from './components/Message/Label';
 import ChannelInfo from './components/Channels/Info';
 import AccountInfo from './components/Account/Info';
-import { cleanJSON } from './helpers/string';
 
 customElements.define('loading-screen', LoadingScreen);
 customElements.define('channels-list', ChannelsList);
@@ -191,7 +190,7 @@ if (localStorage.getItem('locale') !== null) { // @ts-ignore
   setTimeout(() => {
     initPopups();
     document.querySelector('loading-screen')?.remove();
-    ws();
+    //ws();
   }, 2000);
 })();
 
