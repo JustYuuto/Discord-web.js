@@ -5,6 +5,7 @@ import { avatarImgHTML, avatarURL } from '../../helpers/image';
 import { copyText } from '../../helpers/text';
 import Component from '../Component';
 import { cleanJSON } from '../../helpers/string';
+import showContextMenu from '../../helpers/context-menu';
 
 export default class ChannelMessage extends Component {
 
@@ -150,6 +151,13 @@ export default class ChannelMessage extends Component {
       margin: '10px 0', display: 'block'
     }));
     this.innerHTML = html;
+    // @ts-ignore
+    this.querySelector('[data-user-popup]')?.addEventListener('contextmenu', (e: MouseEvent) => {
+      e.preventDefault();
+      showContextMenu([
+        { label: 'Copy ID', onClick: () => copyText(message.author.id) }
+      ], e.x, e.y);
+    });
     messageActions.forEach(action => {
       this.querySelector(`div[aria-label="${action.text}"]`)?.addEventListener('click', action.onClick);
     });
