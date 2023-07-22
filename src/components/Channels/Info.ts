@@ -28,7 +28,7 @@ export default class ChannelInfo extends Component {
           this.innerHTML = html;
         });
       });
-    } else {
+    } else if (urlParts()[1] === '@me' && urlParts()[2]) {
       html += `<div class="${css({
         width: '278px'
       })}">`;
