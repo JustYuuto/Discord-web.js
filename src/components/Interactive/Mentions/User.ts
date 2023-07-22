@@ -14,7 +14,7 @@ export default class UserMention extends Component {
     this.setAttribute('data-user-popup', userId);
     this.innerHTML = '@???';
     user(userId).then(user => {
-      this.innerHTML = `@${user.display_name || user.username}`;
+      this.innerHTML = `@${user.global_name || user.display_name || user.username}`;
     });
   }
 
