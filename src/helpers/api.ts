@@ -145,7 +145,8 @@ export interface Channel {
   name: string,
   topic?: string,
   guild_id: Guild['id'],
-  position: number
+  position: number,
+  parent_id: string | null
 }
 
 interface Guild {
