@@ -56,7 +56,7 @@ export default class ChannelMessage extends Component {
         avatarURL(message.referenced_message.author.id, message.referenced_message.author.avatar, message.referenced_message.author.discriminator, 16), 16,
         { marginRight: '8px', cursor: 'pointer' }
       );
-      html += `<strong>${message.referenced_message.author.display_name || message.referenced_message.author.username}</strong>&nbsp;`;
+      html += `<strong>${message.referenced_message.author.global_name || message.referenced_message.author.display_name || message.referenced_message.author.username}</strong>&nbsp;`;
       html += `<markdown-text text="${message.referenced_message.content.replaceAll('"', '&quot;')}"></markdown-text>`;
       html += `</div>`;
     }
@@ -80,7 +80,7 @@ export default class ChannelMessage extends Component {
     const showTag = message.author.bot || message.author.system;
     html += `<span data-user-popup="${message.author.id}" class="${css({
       cursor: 'pointer', ':hover': { textDecoration: 'underline' }, display: 'flex', gap: '6px'
-    })}">${message.author.display_name || message.author.username}${showTag ? `<user-tag tag="${message.author.system ? 'System' : 'Bot'}"></user-tag>` : ''}</span>&nbsp;`;
+    })}">${message.author.global_name || message.author.display_name || message.author.username}${showTag ? `<user-tag tag="${message.author.system ? 'System' : 'Bot'}"></user-tag>` : ''}</span>&nbsp;`;
     html += `<span class="${css({ fontSize: '.75rem', color: '#92969a', userSelect: 'none' })}" title="${moment(message.timestamp).format('LLLL')}">`;
     html += moment(message.timestamp).format('L LT');
     html += `</span>`;
