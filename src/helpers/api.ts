@@ -298,7 +298,7 @@ export enum ComponentButtonStyle {
 }
 
 export enum ComponentType {
-  '', '', 'BUTTON'
+  '_', '__', 'BUTTON'
 }
 
 declare enum ComponentRowType {
